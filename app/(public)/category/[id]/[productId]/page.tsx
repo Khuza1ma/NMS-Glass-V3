@@ -1,10 +1,12 @@
 "use client";
 
-import React, { use, useState } from "react";
+import React, { use, useState, useEffect } from "react";
 import Link from "next/link";
-import { CATEGORIES } from "../../../products";
+import { getProductDetails } from "../../../../supabase";
+import { CATEGORIES as FALLBACK_CATEGORIES } from "../../../../products";
 import { notFound } from "next/navigation";
-import { FiArrowLeft, FiChevronRight, FiCheckCircle, FiPhone, FiMessageCircle } from "react-icons/fi";
+import SafeImage from "../../../../SafeImage";
+import { FiArrowLeft, FiChevronRight, FiCheckCircle, FiPhone, FiMessageCircle, FiAlertCircle } from "react-icons/fi";
 
 export default function ProductDetailPage({
   params,
@@ -12,32 +14,86 @@ export default function ProductDetailPage({
   params: Promise<{ id: string; productId: string }>;
 }) {
   const resolvedParams = use(params);
-  const category = CATEGORIES.find((cat) => cat.id === resolvedParams.id);
-  if (!category) notFound();
+  const [productData, setProductData] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+  const [activeImage, setActiveImage] = useState("");
+  const [error, setError] = useState<string | null>(null);
 
-  // Search product across subcategories
-  let product = null;
-  let subcategory = null;
-  for (const sub of category.subcategories) {
-    const found = sub.products.find((p) => p.id === resolvedParams.productId);
-    if (found) {
-      product = found;
-      subcategory = sub;
-      break;
+  useEffect(() => {
+    async function loadProduct() {
+      try {
+        setLoading(true);
+        const data = await getProductDetails(resolvedParams.productId);
+        if (data) {
+          setProductData(data);
+          setActiveImage(data.product.images[0]);
+        } else {
+          // Fallback
+          loadFallback();
+        }
+      } catch (err) {
+        console.error(err);
+        setError("Unable to sync details with database. Using cached information.");
+        loadFallback();
+      } finally {
+        setLoading(false);
+      }
     }
+
+    function loadFallback() {
+      const category = FALLBACK_CATEGORIES.find((cat) => cat.id === resolvedParams.id);
+      if (category) {
+        let foundProd = null;
+        let foundSub = null;
+        for (const sub of category.subcategories) {
+          const found = sub.products.find((p) => p.id === resolvedParams.productId);
+          if (found) {
+            foundProd = found;
+            foundSub = sub;
+            break;
+          }
+        }
+        if (foundProd && foundSub) {
+          setProductData({
+            product: foundProd,
+            subcategory: foundSub,
+            category: category
+          });
+          setActiveImage(foundProd.images[0]);
+        }
+      }
+    }
+
+    loadProduct();
+  }, [resolvedParams.productId, resolvedParams.id]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-neutral-950 text-white flex items-center justify-center p-8">
+        <div className="max-w-7xl w-full grid grid-cols-1 lg:grid-cols-12 gap-12 animate-pulse">
+          <div className="lg:col-span-7 aspect-[4/3] bg-neutral-900 rounded-2xl"></div>
+          <div className="lg:col-span-5 space-y-6">
+            <div className="h-6 w-32 bg-neutral-900 rounded"></div>
+            <div className="h-10 w-64 bg-neutral-900 rounded"></div>
+            <div className="h-24 w-full bg-neutral-900 rounded"></div>
+            <div className="h-32 w-full bg-neutral-900 rounded"></div>
+          </div>
+        </div>
+      </div>
+    );
   }
 
-  if (!product || !subcategory) {
+  if (!productData) {
     notFound();
   }
 
-  const [activeImage, setActiveImage] = useState(product.images[0]);
+  const { product, subcategory, category } = productData;
 
-  // Aggregate all gallery images (including variants)
+  // Aggregate all gallery images
   const allImages = [...product.images];
   if (product.variants) {
-    product.variants.forEach((v) => {
-      v.images.forEach((img) => {
+    product.variants.forEach((v: any) => {
+      v.images.forEach((img: string) => {
         if (!allImages.includes(img)) {
           allImages.push(img);
         }
@@ -61,6 +117,14 @@ export default function ProductDetailPage({
           <span className="text-white font-medium">{product.name}</span>
         </div>
 
+        {/* Error Alert Display */}
+        {error && (
+          <div className="bg-amber-500/10 border border-amber-500/20 text-amber-400 p-4 rounded-xl flex items-center gap-3 text-sm">
+            <FiAlertCircle className="text-lg flex-shrink-0" />
+            <span>{error}</span>
+          </div>
+        )}
+
         {/* Back Link */}
         <Link
           href={`/category/${category.id}`}
@@ -75,7 +139,7 @@ export default function ProductDetailPage({
           {/* Gallery Module */}
           <div className="lg:col-span-7 space-y-4">
             <div className="aspect-[4/3] w-full rounded-2xl overflow-hidden border border-white/5 bg-neutral-900 relative">
-              <img
+              <SafeImage
                 src={activeImage}
                 alt={product.name}
                 className="w-full h-full object-cover transition-all duration-300"
@@ -92,7 +156,7 @@ export default function ProductDetailPage({
                       activeImage === img ? "border-sky-500 scale-95" : "border-white/5 hover:border-white/20"
                     }`}
                   >
-                    <img src={img} alt="" className="w-full h-full object-cover" />
+                    <SafeImage src={img} alt="" className="w-full h-full object-cover" />
                   </button>
                 ))}
               </div>
@@ -116,7 +180,7 @@ export default function ProductDetailPage({
               <div className="space-y-3">
                 <h3 className="text-sm font-semibold tracking-wider text-neutral-400 uppercase">Key Features</h3>
                 <ul className="space-y-2">
-                  {product.features.map((feature, i) => (
+                  {product.features.map((feature: string, i: number) => (
                     <li key={i} className="flex items-start gap-2.5 text-xs text-neutral-300">
                       <FiCheckCircle className="text-sky-400 mt-0.5 flex-shrink-0" />
                       <span>{feature}</span>
@@ -131,7 +195,7 @@ export default function ProductDetailPage({
               <div className="space-y-3 border-t border-white/5 pt-6">
                 <h3 className="text-sm font-semibold tracking-wider text-neutral-400 uppercase">Technical Specifications</h3>
                 <div className="grid grid-cols-1 gap-2">
-                  {Object.entries(product.specs).map(([key, val]) => (
+                  {Object.entries(product.specs).map(([key, val]: [string, any]) => (
                     <div key={key} className="flex justify-between items-center text-xs py-1 border-b border-white/5">
                       <span className="text-neutral-400">{key}</span>
                       <span className="text-white font-medium text-right">{val}</span>
@@ -144,7 +208,7 @@ export default function ProductDetailPage({
             {/* Actions / CTA Buttons */}
             <div className="space-y-3 border-t border-white/5 pt-6">
               <a
-                href={`https://wa.me/919999999999?text=Hi%20NMS,%20I%27d%20like%20to%20inquire%20about%20the%20${encodeURIComponent(
+                href={`https://wa.me/918347786753?text=Hi%20NMS,%20I%27d%20like%20to%20inquire%20about%20the%20${encodeURIComponent(
                   product.name
                 )}.`}
                 target="_blank"
@@ -155,7 +219,7 @@ export default function ProductDetailPage({
                 <span>Inquire on WhatsApp</span>
               </a>
               <a
-                href="tel:+919999999999"
+                href="tel:+918347786753"
                 className="w-full flex items-center justify-center gap-2.5 bg-neutral-800 hover:bg-neutral-700 text-white font-semibold py-3 px-4 rounded-xl border border-white/5 transition-colors text-sm"
               >
                 <FiPhone className="text-sky-400" />
@@ -170,13 +234,13 @@ export default function ProductDetailPage({
           <div className="space-y-6 pt-12 border-t border-white/5">
             <h2 className="text-2xl font-bold">Available Variants</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {product.variants.map((v, i) => (
+              {product.variants.map((v: any, i: number) => (
                 <div
                   key={i}
                   className="flex flex-col sm:flex-row gap-6 border border-white/5 bg-neutral-900/40 rounded-2xl p-6 hover:bg-neutral-900 transition-colors"
                 >
                   <div className="w-full sm:w-1/3 aspect-[4/3] rounded-xl overflow-hidden bg-neutral-950">
-                    <img src={v.images[0]} alt={v.name} className="w-full h-full object-cover" />
+                    <SafeImage src={v.images[0]} alt={v.name} className="w-full h-full object-cover" />
                   </div>
                   <div className="w-full sm:w-2/3 flex flex-col justify-between">
                     <div className="space-y-2">

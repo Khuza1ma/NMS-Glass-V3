@@ -1,15 +1,62 @@
 "use client";
 
-import React, { use } from "react";
+import React, { use, useState, useEffect } from "react";
 import Link from "next/link";
-import { CATEGORIES } from "../../products";
+import { getCategoryDetails } from "../../../supabase";
+import { CATEGORIES as FALLBACK_CATEGORIES } from "../../../products";
 import { notFound } from "next/navigation";
-import { FiArrowLeft, FiChevronRight } from "react-icons/fi";
+import SafeImage from "../../../SafeImage";
+import { FiArrowLeft, FiChevronRight, FiAlertCircle } from "react-icons/fi";
 import { motion } from "framer-motion";
 
 export default function CategoryPage({ params }: { params: Promise<{ id: string }> }) {
   const resolvedParams = use(params);
-  const category = CATEGORIES.find((cat) => cat.id === resolvedParams.id);
+  const [category, setCategory] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    async function loadCategory() {
+      try {
+        setLoading(true);
+        const data = await getCategoryDetails(resolvedParams.id);
+        if (data) {
+          setCategory(data);
+        } else {
+          // Fallback
+          const fallback = FALLBACK_CATEGORIES.find((cat) => cat.id === resolvedParams.id);
+          setCategory(fallback || null);
+        }
+      } catch (err) {
+        console.error(err);
+        setError("Could not load products dynamically. Displaying local fallback catalog.");
+        const fallback = FALLBACK_CATEGORIES.find((cat) => cat.id === resolvedParams.id);
+        setCategory(fallback || null);
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadCategory();
+  }, [resolvedParams.id]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-neutral-950 text-white flex items-center justify-center p-8">
+        <div className="max-w-7xl w-full space-y-8 animate-pulse">
+          <div className="h-6 w-32 bg-neutral-900 rounded"></div>
+          <div className="h-[300px] w-full bg-neutral-900 rounded-3xl"></div>
+          <div className="space-y-4">
+            <div className="h-10 w-48 bg-neutral-900 rounded"></div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="h-64 bg-neutral-900 rounded-2xl"></div>
+              <div className="h-64 bg-neutral-900 rounded-2xl"></div>
+              <div className="h-64 bg-neutral-900 rounded-2xl"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   if (!category) {
     notFound();
@@ -27,10 +74,18 @@ export default function CategoryPage({ params }: { params: Promise<{ id: string 
           <span className="text-white font-medium">{category.name}</span>
         </div>
 
+        {/* Error Alert Display */}
+        {error && (
+          <div className="bg-amber-500/10 border border-amber-500/20 text-amber-400 p-4 rounded-xl flex items-center gap-3 text-sm">
+            <FiAlertCircle className="text-lg flex-shrink-0" />
+            <span>{error}</span>
+          </div>
+        )}
+
         {/* Category Header */}
         <div className="relative rounded-3xl overflow-hidden border border-white/5 bg-neutral-900/30 p-8 sm:p-12 md:p-16 flex flex-col justify-end min-h-[300px]">
           <div className="absolute inset-0 bg-gradient-to-t from-neutral-950 via-neutral-900/60 to-transparent z-10" />
-          <img
+          <SafeImage
             src={category.image}
             alt={category.name}
             className="absolute inset-0 w-full h-full object-cover opacity-35 -z-10"
@@ -50,7 +105,7 @@ export default function CategoryPage({ params }: { params: Promise<{ id: string 
 
         {/* Subcategories list */}
         <div className="space-y-16">
-          {category.subcategories.map((sub, index) => (
+          {category.subcategories && category.subcategories.map((sub: any, index: number) => (
             <motion.div
               key={sub.id}
               initial={{ opacity: 0, y: 30 }}
@@ -66,13 +121,13 @@ export default function CategoryPage({ params }: { params: Promise<{ id: string 
 
               {/* Products inside this subcategory */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {sub.products.map((product) => (
+                {sub.products && sub.products.map((product: any) => (
                   <div
                     key={product.id}
                     className="group border border-white/5 rounded-2xl bg-neutral-900/50 hover:bg-neutral-900 overflow-hidden flex flex-col justify-between transition-all duration-300 hover:shadow-2xl hover:shadow-sky-500/5"
                   >
                     <div className="relative h-48 w-full overflow-hidden bg-neutral-950">
-                      <img
+                      <SafeImage
                         src={product.images[0]}
                         alt={product.name}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"

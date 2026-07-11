@@ -2,13 +2,23 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import { getSiteSettings, SiteSettings, FALLBACK_SETTINGS } from "./supabase";
 import { FiMenu, FiX, FiPhone, FiMessageCircle } from "react-icons/fi";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [settings, setSettings] = useState<SiteSettings>(FALLBACK_SETTINGS);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
+    async function loadSettings() {
+      const data = await getSiteSettings();
+      setSettings(data);
+    }
+    loadSettings();
+
     const handleScroll = () => {
       if (window.scrollY > 20) {
         setScrolled(true);
@@ -19,6 +29,8 @@ export default function Navbar() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  const cleanPhone = (!mounted ? FALLBACK_SETTINGS.phone : settings.phone).replace(/\s+/g, "");
 
   return (
     <nav
@@ -34,11 +46,15 @@ export default function Navbar() {
           <div className="flex-shrink-0">
             <Link href="/" className="flex items-center space-x-3 group">
               <span className="h-10 w-10 rounded-lg bg-gradient-to-tr from-sky-500 to-indigo-600 flex items-center justify-center text-white font-bold text-xl shadow-md shadow-sky-500/20 group-hover:scale-105 transition-transform duration-300">
-                N
+                {(!mounted ? FALLBACK_SETTINGS.logo_text : settings.logo_text).charAt(0)}
               </span>
               <div className="flex flex-col">
-                <span className="text-white font-extrabold text-xl tracking-wider leading-none">NMS</span>
-                <span className="text-neutral-400 text-xs tracking-widest mt-0.5">PREMIUM QUALITY</span>
+                <span className="text-white font-extrabold text-xl tracking-wider leading-none">
+                  {!mounted ? FALLBACK_SETTINGS.logo_text : settings.logo_text}
+                </span>
+                <span className="text-neutral-400 text-xs tracking-widest mt-0.5">
+                  {!mounted ? FALLBACK_SETTINGS.logo_subtext : settings.logo_subtext}
+                </span>
               </div>
             </Link>
           </div>
@@ -55,14 +71,14 @@ export default function Navbar() {
               Contact
             </Link>
             <a
-              href="tel:+919999999999"
+              href={`tel:${cleanPhone}`}
               className="flex items-center gap-2 bg-neutral-800 hover:bg-neutral-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors border border-white/5"
             >
               <FiPhone className="text-sky-400" />
               <span>Call Us</span>
             </a>
             <a
-              href="https://wa.me/919999999999?text=Hi%20NMS,%20I%27d%20like%20to%20inquire%20about%20your%20products."
+              href={`https://wa.me/${cleanPhone.replace("+", "")}?text=Hi%20NMS,%20I%27d%20like%20to%20inquire%20about%20your%20products.`}
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-2 bg-gradient-to-r from-emerald-500 to-teal-600 hover:opacity-90 text-white px-4 py-2 rounded-lg text-sm font-medium transition-opacity shadow-md shadow-emerald-500/10"
@@ -110,14 +126,14 @@ export default function Navbar() {
           </Link>
           <div className="pt-2 flex flex-col gap-3">
             <a
-              href="tel:+919999999999"
+              href={`tel:${cleanPhone}`}
               className="flex items-center justify-center gap-2 bg-neutral-800 hover:bg-neutral-700 text-white px-4 py-2.5 rounded-lg text-sm font-medium transition-colors border border-white/5"
             >
               <FiPhone className="text-sky-400" />
               <span>Call Us</span>
             </a>
             <a
-              href="https://wa.me/919999999999?text=Hi%20NMS,%20I%27d%20like%20to%20inquire%20about%20your%20products."
+              href={`https://wa.me/${cleanPhone.replace("+", "")}?text=Hi%20NMS,%20I%27d%20like%20to%20inquire%20about%20your%20products.`}
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center justify-center gap-2 bg-gradient-to-r from-emerald-500 to-teal-600 text-white px-4 py-2.5 rounded-lg text-sm font-medium transition-opacity"

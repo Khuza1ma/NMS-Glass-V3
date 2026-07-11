@@ -1,13 +1,15 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { CATEGORIES } from "./products";
-import { FiArrowRight, FiCheckCircle, FiSend, FiMessageCircle } from "react-icons/fi";
+import { getCategories, getSiteSettings, SiteSettings, FALLBACK_SETTINGS, supabase } from "../supabase";
+import { CATEGORIES as FALLBACK_CATEGORIES } from "../products";
+import SafeImage from "../SafeImage";
+import { FiArrowRight, FiSend, FiMessageCircle, FiAlertCircle } from "react-icons/fi";
 
 const inquirySchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
@@ -20,11 +22,51 @@ const inquirySchema = z.object({
 type InquiryFormData = z.infer<typeof inquirySchema>;
 
 export default function Home() {
+  const [categories, setCategories] = useState<any[]>([]);
+  const [settings, setSettings] = useState<SiteSettings>(FALLBACK_SETTINGS);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+    async function loadData() {
+      try {
+        setLoading(true);
+        // Load settings
+        const settingsData = await getSiteSettings();
+        setSettings(settingsData);
+
+        // Load categories
+        const data = await getCategories();
+        if (data && data.length > 0) {
+          const enriched = data.map(cat => {
+            const matchedFallback = FALLBACK_CATEGORIES.find(f => f.id === cat.id);
+            return {
+              ...cat,
+              subcategories: matchedFallback ? matchedFallback.subcategories : []
+            };
+          });
+          setCategories(enriched);
+        } else {
+          setCategories(FALLBACK_CATEGORIES);
+        }
+      } catch (err) {
+        console.error(err);
+        setError("Unable to load live data catalog. Displaying offline results.");
+        setCategories(FALLBACK_CATEGORIES);
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadData();
+  }, []);
+
   const {
     register,
     handleSubmit,
     reset,
-    formState: { errors, isSubmitSuccessful },
+    formState: { errors },
   } = useForm<InquiryFormData>({
     resolver: zodResolver(inquirySchema),
     defaultValues: {
@@ -36,13 +78,33 @@ export default function Home() {
     },
   });
 
-  const onSubmit = (data: InquiryFormData) => {
-    // Structural Supabase submission hook
-    console.log("Form submission data:", data);
-    // Can hook up to Supabase 'inquiries' table in the future
-    alert("Thank you! Your inquiry has been sent successfully.");
-    reset();
+  const onSubmit = async (data: InquiryFormData) => {
+    try {
+      const { error } = await supabase.from("inquiries").insert([
+        {
+          name: data.name,
+          phone: data.phone,
+          email: data.email || null,
+          category: data.category,
+          message: data.message,
+        },
+      ]);
+
+      if (error) {
+        alert("Database Error: " + error.message);
+        console.error("Supabase Error details:", error);
+        return;
+      }
+
+      alert("Thank you! Your inquiry has been sent successfully.");
+      reset();
+    } catch (err: any) {
+      console.error("Submission catch error:", err);
+      alert("Submission failed: " + (err.message || err));
+    }
   };
+
+  const cleanPhone = settings.phone.replace(/\s+/g, "");
 
   return (
     <div className="flex flex-col bg-neutral-950 text-white min-h-screen">
@@ -59,26 +121,26 @@ export default function Home() {
             transition={{ duration: 0.6 }}
           >
             <span className="px-3 py-1 text-xs font-semibold uppercase tracking-widest text-sky-400 bg-sky-400/10 border border-sky-400/20 rounded-full">
-              NMS Architectural & Composite Fabricators
+              {!mounted ? FALLBACK_SETTINGS.logo_text : settings.logo_text} Architectural & Composite Fabricators
             </span>
           </motion.div>
 
           <motion.h1
-            className="text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-neutral-200 to-neutral-400"
+            className="text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-neutral-200 to-neutral-400 text-balance"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.1 }}
           >
-            Premium Aluminum, Fiber <br />& Mosquito Net Solutions
+            {!mounted ? FALLBACK_SETTINGS.logo_text : settings.logo_text} Custom Glass, <br />Aluminum & Fiber Solutions
           </motion.h1>
 
           <motion.p
-            className="text-lg md:text-xl text-neutral-400 max-w-3xl mx-auto font-light leading-relaxed"
+            className="text-lg md:text-xl text-neutral-400 max-w-3xl mx-auto font-light leading-relaxed text-balance"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
           >
-            Crafting architectural elements for custom premium workspaces, residential flats, and luxury offices. Build with precision, durability, and elegant styles.
+            {!mounted ? FALLBACK_SETTINGS.site_subtitle : settings.site_subtitle}
           </motion.p>
 
           <motion.div
@@ -104,6 +166,16 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Error Alert Display */}
+      {error && (
+        <div className="max-w-7xl mx-auto px-4 w-full">
+          <div className="bg-amber-500/10 border border-amber-500/20 text-amber-400 p-4 rounded-xl flex items-center gap-3 text-sm">
+            <FiAlertCircle className="text-lg flex-shrink-0" />
+            <span>{error}</span>
+          </div>
+        </div>
+      )}
+
       {/* Categories Grid Section */}
       <section id="categories" className="py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full border-t border-white/5">
         <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
@@ -113,58 +185,72 @@ export default function Home() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {CATEGORIES.map((category, index) => (
-            <motion.div
-              key={category.id}
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="group relative rounded-2xl overflow-hidden border border-white/5 bg-neutral-900/40 backdrop-blur-sm shadow-xl flex flex-col h-[380px]"
-            >
-              {/* Image Background Cover */}
-              <div className="absolute inset-0 bg-gradient-to-t from-neutral-950 via-neutral-900/60 to-transparent z-10 transition-colors group-hover:from-neutral-950/95" />
-              <img
-                src={category.image}
-                alt={category.name}
-                className="absolute inset-0 w-full h-full object-cover opacity-45 group-hover:scale-105 transition-transform duration-700 -z-10"
-              />
+        {/* Loading Skeleton */}
+        {loading ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {[1, 2, 3, 4].map((i) => (
+              <div key={i} className="h-[380px] bg-neutral-900/40 border border-white/5 rounded-2xl animate-pulse flex flex-col justify-end p-8 space-y-4">
+                <div className="h-6 w-24 bg-neutral-800 rounded"></div>
+                <div className="h-8 w-48 bg-neutral-800 rounded"></div>
+                <div className="h-16 w-full bg-neutral-800 rounded"></div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {categories.map((category, index) => (
+              <motion.div
+                key={category.id}
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                className="group relative rounded-2xl overflow-hidden border border-white/5 bg-neutral-900/40 backdrop-blur-sm shadow-xl flex flex-col h-[380px]"
+              >
+                {/* Image Background Cover */}
+                <div className="absolute inset-0 bg-gradient-to-t from-neutral-950 via-neutral-900/60 to-transparent z-10 transition-colors group-hover:from-neutral-950/95" />
+                <SafeImage
+                  src={category.image}
+                  alt={category.name}
+                  className="absolute inset-0 w-full h-full object-cover opacity-45 group-hover:scale-105 transition-transform duration-700 -z-10"
+                />
 
-              <div className="relative z-20 p-8 mt-auto flex flex-col h-full justify-between">
-                <span className="self-start text-xs font-semibold tracking-widest text-sky-400 uppercase bg-sky-500/10 px-3 py-1 rounded-full border border-sky-400/20">
-                  NMS Service
-                </span>
+                <div className="relative z-20 p-8 mt-auto flex flex-col h-full justify-between">
+                  <span className="self-start text-xs font-semibold tracking-widest text-sky-400 uppercase bg-sky-500/10 px-3 py-1 rounded-full border border-sky-400/20">
+                    {settings.logo_text} Service
+                  </span>
 
-                <div className="space-y-3">
-                  <h3 className="text-2xl font-bold text-white group-hover:text-sky-400 transition-colors flex items-center gap-2">
-                    <span>{category.name}</span>
-                    <FiArrowRight className="opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
-                  </h3>
-                  <p className="text-sm text-neutral-300 leading-relaxed max-w-md">
-                    {category.description}
-                  </p>
-                  <div className="pt-4 flex flex-wrap gap-2">
-                    {category.subcategories.map((sub) => (
-                      <span key={sub.id} className="text-xs text-neutral-400 bg-neutral-900 border border-white/5 px-2.5 py-1 rounded-md">
-                        {sub.name}
-                      </span>
-                    ))}
-                  </div>
-                  <div className="pt-4">
-                    <Link
-                      href={`/category/${category.id}`}
-                      className="inline-flex items-center gap-2 text-sky-400 hover:text-sky-300 text-sm font-semibold transition-colors"
-                    >
-                      <span>View Service Catalogue</span>
-                      <FiArrowRight />
-                    </Link>
+                  <div className="space-y-3">
+                    <h3 className="text-2xl font-bold text-white group-hover:text-sky-400 transition-colors flex items-center gap-2">
+                      <span>{category.name}</span>
+                      <FiArrowRight className="opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
+                    </h3>
+                    <p className="text-sm text-neutral-300 leading-relaxed max-w-md">
+                      {category.description}
+                    </p>
+                    <div className="pt-4 flex flex-wrap gap-2">
+                      {category.subcategories &&
+                        category.subcategories.map((sub: any) => (
+                          <span key={sub.id} className="text-xs text-neutral-400 bg-neutral-900 border border-white/5 px-2.5 py-1 rounded-md">
+                            {sub.name}
+                          </span>
+                        ))}
+                    </div>
+                    <div className="pt-4">
+                      <Link
+                        href={`/category/${category.id}`}
+                        className="inline-flex items-center gap-2 text-sky-400 hover:text-sky-300 text-sm font-semibold transition-colors"
+                      >
+                        <span>View Service Catalogue</span>
+                        <FiArrowRight />
+                      </Link>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </motion.div>
-          ))}
-        </div>
+              </motion.div>
+            ))}
+          </div>
+        )}
       </section>
 
       {/* Inquiry and Contact section */}
@@ -183,7 +269,7 @@ export default function Home() {
 
               <div className="flex flex-col sm:flex-row gap-4 pt-4">
                 <a
-                  href="https://wa.me/919999999999?text=Hi%20NMS,%20I%27d%20like%20to%20inquire%20about%20your%20products."
+                  href={`https://wa.me/${(!mounted ? FALLBACK_SETTINGS.phone : settings.phone).replace(/\s+/g, "").replace("+", "")}?text=Hi%20NMS,%20I%27d%20like%20to%20inquire%20about%20your%20products.`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center justify-center gap-3 bg-emerald-500 hover:bg-emerald-600 text-white font-semibold py-4 px-6 rounded-xl shadow-lg shadow-emerald-500/20 transition-colors"
@@ -218,7 +304,7 @@ export default function Home() {
                     <input
                       type="text"
                       {...register("phone")}
-                      placeholder="e.g. +91 99999 99999"
+                      placeholder={`e.g. ${!mounted ? FALLBACK_SETTINGS.phone : settings.phone}`}
                       className="w-full bg-neutral-950 border border-white/10 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-sky-500 transition-colors"
                     />
                     {errors.phone && <p className="text-xs text-red-500 mt-1">{errors.phone.message}</p>}
@@ -243,7 +329,7 @@ export default function Home() {
                     className="w-full bg-neutral-950 border border-white/10 rounded-xl px-4 py-3 text-neutral-300 text-sm focus:outline-none focus:border-sky-500 transition-colors"
                   >
                     <option value="">Select a Category</option>
-                    {CATEGORIES.map((cat) => (
+                    {categories.map((cat) => (
                       <option key={cat.id} value={cat.id}>
                         {cat.name}
                       </option>
