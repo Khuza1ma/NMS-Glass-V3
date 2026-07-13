@@ -2,13 +2,13 @@
 
 import React, { use, useState, useEffect } from "react";
 import Link from "next/link";
-import { getProductDetails } from "../../../../supabase";
-import { CATEGORIES as FALLBACK_CATEGORIES } from "../../../../products";
+import { getProductDetails } from "@/app/lib/supabase";
+import { CATEGORIES as FALLBACK_CATEGORIES } from "@/app/lib/products";
 import { notFound } from "next/navigation";
-import SafeImage from "../../../../SafeImage";
+import SafeImage from "@/components/SafeImage";
 import { FiArrowLeft, FiCheckCircle, FiPhone, FiMessageCircle } from "react-icons/fi";
-import Breadcrumbs from "../../../../../components/Breadcrumbs";
-import Alert from "../../../../../components/Alert";
+import Breadcrumbs from "@/components/Breadcrumbs";
+import Alert from "@/components/Alert";
 
 export default function ProductDetailPage({
   params,

@@ -2,15 +2,15 @@
 
 import React, { use, useState, useEffect } from "react";
 import Link from "next/link";
-import { getCategoryDetails } from "../../../supabase";
-import { CATEGORIES as FALLBACK_CATEGORIES } from "../../../products";
+import { getCategoryDetails } from "@/app/lib/supabase";
+import { CATEGORIES as FALLBACK_CATEGORIES } from "@/app/lib/products";
 import { notFound } from "next/navigation";
-import SafeImage from "../../../SafeImage";
+import SafeImage from "@/components/SafeImage";
 import { FiArrowLeft } from "react-icons/fi";
 import { motion } from "framer-motion";
-import Breadcrumbs from "../../../../components/Breadcrumbs";
-import Alert from "../../../../components/Alert";
-import ProductCard from "../../../../components/ProductCard";
+import Breadcrumbs from "@/components/Breadcrumbs";
+import Alert from "@/components/Alert";
+import ProductCard from "@/components/ProductCard";
 
 export default function CategoryPage({ params }: { params: Promise<{ id: string }> }) {
   const resolvedParams = use(params);

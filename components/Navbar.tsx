@@ -2,8 +2,8 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { getSiteSettings, FALLBACK_SETTINGS } from "./supabase";
-import { SiteSettings } from "./types";
+import { getSiteSettings, FALLBACK_SETTINGS } from "@/app/lib/supabase";
+import { SiteSettings } from "@/app/lib/types";
 import { FiMenu, FiX, FiPhone, FiMessageCircle } from "react-icons/fi";
 
 export default function Navbar() {

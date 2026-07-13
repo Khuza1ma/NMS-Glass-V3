@@ -6,12 +6,12 @@ import { motion } from "framer-motion";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { getCategories, getSiteSettings, FALLBACK_SETTINGS, submitInquiry } from "../supabase";
-import { SiteSettings } from "../types";
-import { CATEGORIES as FALLBACK_CATEGORIES } from "../products";
-import SafeImage from "../SafeImage";
+import { getCategories, getSiteSettings, FALLBACK_SETTINGS, submitInquiry } from "@/app/lib/supabase";
+import { SiteSettings } from "@/app/lib/types";
+import { CATEGORIES as FALLBACK_CATEGORIES } from "@/app/lib/products";
+import SafeImage from "@/components/SafeImage";
 import { FiArrowRight, FiSend, FiMessageCircle } from "react-icons/fi";
-import Alert from "../../components/Alert";
+import Alert from "@/components/Alert";
 
 const inquirySchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
