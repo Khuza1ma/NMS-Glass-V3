@@ -9,7 +9,8 @@ import * as z from "zod";
 import { getCategories, getSiteSettings, SiteSettings, FALLBACK_SETTINGS, supabase } from "../supabase";
 import { CATEGORIES as FALLBACK_CATEGORIES } from "../products";
 import SafeImage from "../SafeImage";
-import { FiArrowRight, FiSend, FiMessageCircle, FiAlertCircle } from "react-icons/fi";
+import { FiArrowRight, FiSend, FiMessageCircle } from "react-icons/fi";
+import Alert from "../components/Alert";
 
 const inquirySchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
@@ -169,10 +170,7 @@ export default function Home() {
       {/* Error Alert Display */}
       {error && (
         <div className="max-w-7xl mx-auto px-4 w-full">
-          <div className="bg-amber-500/10 border border-amber-500/20 text-amber-400 p-4 rounded-xl flex items-center gap-3 text-sm">
-            <FiAlertCircle className="text-lg flex-shrink-0" />
-            <span>{error}</span>
-          </div>
+          <Alert message={error} />
         </div>
       )}
 

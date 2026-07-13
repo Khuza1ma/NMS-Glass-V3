@@ -6,7 +6,9 @@ import { getProductDetails } from "../../../../supabase";
 import { CATEGORIES as FALLBACK_CATEGORIES } from "../../../../products";
 import { notFound } from "next/navigation";
 import SafeImage from "../../../../SafeImage";
-import { FiArrowLeft, FiChevronRight, FiCheckCircle, FiPhone, FiMessageCircle, FiAlertCircle } from "react-icons/fi";
+import { FiArrowLeft, FiCheckCircle, FiPhone, FiMessageCircle } from "react-icons/fi";
+import Breadcrumbs from "../../../../components/Breadcrumbs";
+import Alert from "../../../../components/Alert";
 
 export default function ProductDetailPage({
   params,
@@ -105,25 +107,16 @@ export default function ProductDetailPage({
     <div className="min-h-screen bg-neutral-950 text-white py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto space-y-12">
         {/* Breadcrumbs */}
-        <div className="flex items-center space-x-2 text-sm text-neutral-400">
-          <Link href="/" className="hover:text-white transition-colors">
-            Home
-          </Link>
-          <FiChevronRight className="text-xs" />
-          <Link href={`/category/${category.id}`} className="hover:text-white transition-colors">
-            {category.name}
-          </Link>
-          <FiChevronRight className="text-xs" />
-          <span className="text-white font-medium">{product.name}</span>
-        </div>
+        <Breadcrumbs
+          items={[
+            { label: "Home", href: "/" },
+            { label: category.name, href: `/category/${category.id}` },
+            { label: product.name },
+          ]}
+        />
 
         {/* Error Alert Display */}
-        {error && (
-          <div className="bg-amber-500/10 border border-amber-500/20 text-amber-400 p-4 rounded-xl flex items-center gap-3 text-sm">
-            <FiAlertCircle className="text-lg flex-shrink-0" />
-            <span>{error}</span>
-          </div>
-        )}
+        {error && <Alert message={error} />}
 
         {/* Back Link */}
         <Link

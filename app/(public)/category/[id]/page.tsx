@@ -6,8 +6,11 @@ import { getCategoryDetails } from "../../../supabase";
 import { CATEGORIES as FALLBACK_CATEGORIES } from "../../../products";
 import { notFound } from "next/navigation";
 import SafeImage from "../../../SafeImage";
-import { FiArrowLeft, FiChevronRight, FiAlertCircle } from "react-icons/fi";
+import { FiArrowLeft } from "react-icons/fi";
 import { motion } from "framer-motion";
+import Breadcrumbs from "../../../components/Breadcrumbs";
+import Alert from "../../../components/Alert";
+import ProductCard from "../../../components/ProductCard";
 
 export default function CategoryPage({ params }: { params: Promise<{ id: string }> }) {
   const resolvedParams = use(params);
@@ -66,21 +69,10 @@ export default function CategoryPage({ params }: { params: Promise<{ id: string 
     <div className="min-h-screen bg-neutral-950 text-white py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto space-y-12">
         {/* Breadcrumbs */}
-        <div className="flex items-center space-x-2 text-sm text-neutral-400">
-          <Link href="/" className="hover:text-white transition-colors">
-            Home
-          </Link>
-          <FiChevronRight className="text-xs" />
-          <span className="text-white font-medium">{category.name}</span>
-        </div>
+        <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: category.name }]} />
 
         {/* Error Alert Display */}
-        {error && (
-          <div className="bg-amber-500/10 border border-amber-500/20 text-amber-400 p-4 rounded-xl flex items-center gap-3 text-sm">
-            <FiAlertCircle className="text-lg flex-shrink-0" />
-            <span>{error}</span>
-          </div>
-        )}
+        {error && <Alert message={error} />}
 
         {/* Category Header */}
         <div className="relative rounded-3xl overflow-hidden border border-white/5 bg-neutral-900/30 p-8 sm:p-12 md:p-16 flex flex-col justify-end min-h-[300px]">
@@ -122,40 +114,7 @@ export default function CategoryPage({ params }: { params: Promise<{ id: string 
               {/* Products inside this subcategory */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {sub.products && sub.products.map((product: any) => (
-                  <div
-                    key={product.id}
-                    className="group border border-white/5 rounded-2xl bg-neutral-900/50 hover:bg-neutral-900 overflow-hidden flex flex-col justify-between transition-all duration-300 hover:shadow-2xl hover:shadow-sky-500/5"
-                  >
-                    <div className="relative h-48 w-full overflow-hidden bg-neutral-950">
-                      <SafeImage
-                        src={product.images[0]}
-                        alt={product.name}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                      />
-                    </div>
-
-                    <div className="p-6 space-y-4 flex flex-col flex-1 justify-between">
-                      <div className="space-y-2">
-                        <h3 className="text-lg font-bold text-white group-hover:text-sky-400 transition-colors">
-                          {product.name}
-                        </h3>
-                        <p className="text-xs text-neutral-400 line-clamp-2 leading-relaxed">
-                          {product.description}
-                        </p>
-                      </div>
-
-                      <div className="pt-4 flex items-center justify-between">
-                        <span className="text-xs text-neutral-500">Premium Fit</span>
-                        <Link
-                          href={`/category/${category.id}/${product.id}`}
-                          className="inline-flex items-center gap-1.5 text-xs text-sky-400 font-semibold group-hover:underline"
-                        >
-                          <span>View Details</span>
-                          <FiChevronRight />
-                        </Link>
-                      </div>
-                    </div>
-                  </div>
+                  <ProductCard key={product.id} product={product} categoryId={category.id} />
                 ))}
               </div>
             </motion.div>
