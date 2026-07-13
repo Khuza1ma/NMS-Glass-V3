@@ -2,8 +2,9 @@
 
 import React, { use, useState, useEffect } from "react";
 import Link from "next/link";
-import { getCategoryDetails } from "@/app/lib/supabase";
-import { CATEGORIES as FALLBACK_CATEGORIES } from "@/app/lib/products";
+import { getCategoryDetails } from "@/lib/supabase";
+import { CATEGORIES as FALLBACK_CATEGORIES } from "@/lib/products";
+import { Category, SubCategory, Product } from "@/lib/types";
 import { notFound } from "next/navigation";
 import SafeImage from "@/components/SafeImage";
 import { FiArrowLeft } from "react-icons/fi";
@@ -14,7 +15,7 @@ import ProductCard from "@/components/ProductCard";
 
 export default function CategoryPage({ params }: { params: Promise<{ id: string }> }) {
   const resolvedParams = use(params);
-  const [category, setCategory] = useState<any>(null);
+  const [category, setCategory] = useState<Category | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -97,7 +98,7 @@ export default function CategoryPage({ params }: { params: Promise<{ id: string 
 
         {/* Subcategories list */}
         <div className="space-y-16">
-          {category.subcategories && category.subcategories.map((sub: any, index: number) => (
+          {category.subcategories && category.subcategories.map((sub: SubCategory, index: number) => (
             <motion.div
               key={sub.id}
               initial={{ opacity: 0, y: 30 }}
@@ -113,7 +114,7 @@ export default function CategoryPage({ params }: { params: Promise<{ id: string 
 
               {/* Products inside this subcategory */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {sub.products && sub.products.map((product: any) => (
+                {sub.products && sub.products.map((product: Product) => (
                   <ProductCard key={product.id} product={product} categoryId={category.id} />
                 ))}
               </div>

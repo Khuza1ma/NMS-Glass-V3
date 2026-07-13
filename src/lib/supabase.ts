@@ -5,7 +5,7 @@ const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'placeholde
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
-import { ProductVariant, Product, SubCategory, Category, SiteSettings, Inquiry } from './types';
+import { Product, Category, SiteSettings, Inquiry } from './types';
 
 // Fallback configuration if Supabase settings are empty
 export const FALLBACK_SETTINGS: SiteSettings = {
@@ -136,7 +136,7 @@ export async function getProductDetails(productId: string) {
     if (catError) throw catError;
 
     // Fetch variants
-    const { data: variants, error: varError } = await supabase
+    const { data: variants } = await supabase
       .from('product_variants')
       .select('*')
       .eq('product_id', productId);
@@ -156,7 +156,7 @@ export async function getProductDetails(productId: string) {
 }
 
 // Submit inquiry to Supabase
-export async function submitInquiry(inquiry: Inquiry): Promise<{ success: boolean; error?: any }> {
+export async function submitInquiry(inquiry: Inquiry): Promise<{ success: boolean; error?: { message: string } | null }> {
   try {
     const { error } = await supabase
       .from('inquiries')
@@ -166,6 +166,9 @@ export async function submitInquiry(inquiry: Inquiry): Promise<{ success: boolea
     return { success: true };
   } catch (err) {
     console.error("Error submitting inquiry to Supabase:", err);
-    return { success: false, error: err };
+    return { 
+      success: false, 
+      error: err instanceof Error ? err : { message: String(err) } 
+    };
   }
 }

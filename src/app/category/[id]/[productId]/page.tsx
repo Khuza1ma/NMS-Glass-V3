@@ -2,8 +2,15 @@
 
 import React, { use, useState, useEffect } from "react";
 import Link from "next/link";
-import { getProductDetails } from "@/app/lib/supabase";
-import { CATEGORIES as FALLBACK_CATEGORIES } from "@/app/lib/products";
+import { getProductDetails } from "@/lib/supabase";
+import { CATEGORIES as FALLBACK_CATEGORIES } from "@/lib/products";
+import { Category, SubCategory, Product, ProductVariant } from "@/lib/types";
+
+interface ProductDetailsData {
+  product: Product;
+  subcategory: SubCategory;
+  category: Category;
+}
 import { notFound } from "next/navigation";
 import SafeImage from "@/components/SafeImage";
 import { FiArrowLeft, FiCheckCircle, FiPhone, FiMessageCircle } from "react-icons/fi";
@@ -16,7 +23,7 @@ export default function ProductDetailPage({
   params: Promise<{ id: string; productId: string }>;
 }) {
   const resolvedParams = use(params);
-  const [productData, setProductData] = useState<any>(null);
+  const [productData, setProductData] = useState<ProductDetailsData | null>(null);
   const [loading, setLoading] = useState(true);
   const [activeImage, setActiveImage] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -94,7 +101,7 @@ export default function ProductDetailPage({
   // Aggregate all gallery images
   const allImages = [...product.images];
   if (product.variants) {
-    product.variants.forEach((v: any) => {
+    product.variants.forEach((v: ProductVariant) => {
       v.images.forEach((img: string) => {
         if (!allImages.includes(img)) {
           allImages.push(img);
@@ -188,7 +195,7 @@ export default function ProductDetailPage({
               <div className="space-y-3 border-t border-white/5 pt-6">
                 <h3 className="text-sm font-semibold tracking-wider text-neutral-400 uppercase">Technical Specifications</h3>
                 <div className="grid grid-cols-1 gap-2">
-                  {Object.entries(product.specs).map(([key, val]: [string, any]) => (
+                  {Object.entries(product.specs).map(([key, val]: [string, string]) => (
                     <div key={key} className="flex justify-between items-center text-xs py-1 border-b border-white/5">
                       <span className="text-neutral-400">{key}</span>
                       <span className="text-white font-medium text-right">{val}</span>
@@ -227,7 +234,7 @@ export default function ProductDetailPage({
           <div className="space-y-6 pt-12 border-t border-white/5">
             <h2 className="text-2xl font-bold">Available Variants</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {product.variants.map((v: any, i: number) => (
+              {product.variants.map((v: ProductVariant, i: number) => (
                 <div
                   key={i}
                   className="flex flex-col sm:flex-row gap-6 border border-white/5 bg-neutral-900/40 rounded-2xl p-6 hover:bg-neutral-900 transition-colors"

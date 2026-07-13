@@ -6,9 +6,9 @@ import { motion } from "framer-motion";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { getCategories, getSiteSettings, FALLBACK_SETTINGS, submitInquiry } from "@/app/lib/supabase";
-import { SiteSettings } from "@/app/lib/types";
-import { CATEGORIES as FALLBACK_CATEGORIES } from "@/app/lib/products";
+import { getCategories, getSiteSettings, FALLBACK_SETTINGS, submitInquiry } from "@/lib/supabase";
+import { SiteSettings, Category, SubCategory } from "@/lib/types";
+import { CATEGORIES as FALLBACK_CATEGORIES } from "@/lib/products";
 import SafeImage from "@/components/SafeImage";
 import { FiArrowRight, FiSend, FiMessageCircle } from "react-icons/fi";
 import Alert from "@/components/Alert";
@@ -24,14 +24,16 @@ const inquirySchema = z.object({
 type InquiryFormData = z.infer<typeof inquirySchema>;
 
 export default function Home() {
-  const [categories, setCategories] = useState<any[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
   const [settings, setSettings] = useState<SiteSettings>(FALLBACK_SETTINGS);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    setMounted(true);
+    const timer = setTimeout(() => {
+      setMounted(true);
+    }, 0);
     async function loadData() {
       try {
         setLoading(true);
@@ -62,6 +64,7 @@ export default function Home() {
       }
     }
     loadData();
+    return () => clearTimeout(timer);
   }, []);
 
   const {
@@ -98,13 +101,14 @@ export default function Home() {
 
       alert("Thank you! Your inquiry has been sent successfully.");
       reset();
-    } catch (err: any) {
+    } catch (err) {
+      const errorMsg = err instanceof Error ? err.message : String(err);
       console.error("Submission catch error:", err);
-      alert("Submission failed: " + (err.message || err));
+      alert("Submission failed: " + errorMsg);
     }
   };
 
-  const cleanPhone = settings.phone.replace(/\s+/g, "");
+  const cleanPhone = (!mounted ? FALLBACK_SETTINGS.phone : settings.phone).replace(/\s+/g, "").replace("+", "");
 
   return (
     <div className="flex flex-col bg-neutral-950 text-white min-h-screen">
@@ -227,7 +231,7 @@ export default function Home() {
                     </p>
                     <div className="pt-4 flex flex-wrap gap-2">
                       {category.subcategories &&
-                        category.subcategories.map((sub: any) => (
+                        category.subcategories.map((sub: SubCategory) => (
                           <span key={sub.id} className="text-xs text-neutral-400 bg-neutral-900 border border-white/5 px-2.5 py-1 rounded-md">
                             {sub.name}
                           </span>
@@ -266,7 +270,7 @@ export default function Home() {
 
               <div className="flex flex-col sm:flex-row gap-4 pt-4">
                 <a
-                  href={`https://wa.me/${(!mounted ? FALLBACK_SETTINGS.phone : settings.phone).replace(/\s+/g, "").replace("+", "")}?text=Hi%20NMS,%20I%27d%20like%20to%20inquire%20about%20your%20products.`}
+                  href={`https://wa.me/${cleanPhone}?text=Hi%20NMS,%20I%27d%20like%20to%20inquire%20about%20your%20products.`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center justify-center gap-3 bg-emerald-500 hover:bg-emerald-600 text-white font-semibold py-4 px-6 rounded-xl shadow-lg shadow-emerald-500/20 transition-colors"

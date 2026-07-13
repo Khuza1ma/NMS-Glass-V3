@@ -2,8 +2,8 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { getSiteSettings, FALLBACK_SETTINGS } from "@/app/lib/supabase";
-import { SiteSettings } from "@/app/lib/types";
+import { getSiteSettings, FALLBACK_SETTINGS } from "@/lib/supabase";
+import { SiteSettings } from "@/lib/types";
 import { FiMail, FiPhone, FiMapPin, FiClock } from "react-icons/fi";
 import { FaLinkedin, FaInstagram, FaPhoneAlt } from "react-icons/fa";
 
@@ -12,12 +12,15 @@ export default function Footer() {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    setMounted(true);
+    const timer = setTimeout(() => {
+      setMounted(true);
+    }, 0);
     async function loadSettings() {
       const data = await getSiteSettings();
       setSettings(data);
     }
     loadSettings();
+    return () => clearTimeout(timer);
   }, []);
 
   const cleanPhone = (!mounted ? FALLBACK_SETTINGS.phone : settings.phone).replace(/\s+/g, "");

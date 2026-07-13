@@ -2,8 +2,8 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { getSiteSettings, FALLBACK_SETTINGS } from "@/app/lib/supabase";
-import { SiteSettings } from "@/app/lib/types";
+import { getSiteSettings, FALLBACK_SETTINGS } from "@/lib/supabase";
+import { SiteSettings } from "@/lib/types";
 import { FiMenu, FiX, FiPhone, FiMessageCircle } from "react-icons/fi";
 
 export default function Navbar() {
@@ -13,7 +13,9 @@ export default function Navbar() {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    setMounted(true);
+    const timer = setTimeout(() => {
+      setMounted(true);
+    }, 0);
     async function loadSettings() {
       const data = await getSiteSettings();
       setSettings(data);
@@ -28,7 +30,10 @@ export default function Navbar() {
       }
     };
     window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener("scroll", handleScroll);
+    };
   }, []);
 
   const cleanPhone = (!mounted ? FALLBACK_SETTINGS.phone : settings.phone).replace(/\s+/g, "");
