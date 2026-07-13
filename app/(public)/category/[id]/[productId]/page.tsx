@@ -7,8 +7,8 @@ import { CATEGORIES as FALLBACK_CATEGORIES } from "../../../../products";
 import { notFound } from "next/navigation";
 import SafeImage from "../../../../SafeImage";
 import { FiArrowLeft, FiCheckCircle, FiPhone, FiMessageCircle } from "react-icons/fi";
-import Breadcrumbs from "../../../../components/Breadcrumbs";
-import Alert from "../../../../components/Alert";
+import Breadcrumbs from "../../../../../components/Breadcrumbs";
+import Alert from "../../../../../components/Alert";
 
 export default function ProductDetailPage({
   params,
@@ -47,8 +47,8 @@ export default function ProductDetailPage({
       if (category) {
         let foundProd = null;
         let foundSub = null;
-        for (const sub of category.subcategories) {
-          const found = sub.products.find((p) => p.id === resolvedParams.productId);
+        for (const sub of category.subcategories || []) {
+          const found = (sub.products || []).find((p) => p.id === resolvedParams.productId);
           if (found) {
             foundProd = found;
             foundSub = sub;

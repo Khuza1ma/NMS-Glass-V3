@@ -5,55 +5,7 @@ const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'placeholde
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
-export interface ProductVariant {
-  name: string;
-  description?: string;
-  images: string[];
-  specs?: Record<string, string>;
-}
-
-export interface Product {
-  id: string;
-  subcategory_id: string;
-  name: string;
-  description: string;
-  features?: string[];
-  specs?: Record<string, string>;
-  images: string[];
-  variants?: ProductVariant[];
-}
-
-export interface SubCategory {
-  id: string;
-  category_id: string;
-  name: string;
-  description: string;
-  image: string;
-  products?: Product[];
-}
-
-export interface Category {
-  id: string;
-  name: string;
-  description: string;
-  image: string;
-  subcategories?: SubCategory[];
-}
-
-export interface SiteSettings {
-  id: string;
-  site_title: string;
-  site_subtitle: string;
-  logo_text: string;
-  logo_subtext: string;
-  phone: string;
-  email: string;
-  address: string;
-  google_maps_url: string;
-  justdial_url?: string;
-  linkedin_url?: string;
-  instagram_url?: string;
-}
+import { ProductVariant, Product, SubCategory, Category, SiteSettings, Inquiry } from './types';
 
 // Fallback configuration if Supabase settings are empty
 export const FALLBACK_SETTINGS: SiteSettings = {
@@ -200,5 +152,20 @@ export async function getProductDetails(productId: string) {
   } catch (err) {
     console.error(`Error loading product ${productId} from Supabase:`, err);
     return null;
+  }
+}
+
+// Submit inquiry to Supabase
+export async function submitInquiry(inquiry: Inquiry): Promise<{ success: boolean; error?: any }> {
+  try {
+    const { error } = await supabase
+      .from('inquiries')
+      .insert([inquiry]);
+
+    if (error) throw error;
+    return { success: true };
+  } catch (err) {
+    console.error("Error submitting inquiry to Supabase:", err);
+    return { success: false, error: err };
   }
 }

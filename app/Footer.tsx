@@ -2,7 +2,8 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { getSiteSettings, SiteSettings, FALLBACK_SETTINGS } from "./supabase";
+import { getSiteSettings, FALLBACK_SETTINGS } from "./supabase";
+import { SiteSettings } from "./types";
 import { FiMail, FiPhone, FiMapPin, FiClock } from "react-icons/fi";
 import { FaLinkedin, FaInstagram, FaPhoneAlt } from "react-icons/fa";
 

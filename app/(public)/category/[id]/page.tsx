@@ -8,9 +8,9 @@ import { notFound } from "next/navigation";
 import SafeImage from "../../../SafeImage";
 import { FiArrowLeft } from "react-icons/fi";
 import { motion } from "framer-motion";
-import Breadcrumbs from "../../../components/Breadcrumbs";
-import Alert from "../../../components/Alert";
-import ProductCard from "../../../components/ProductCard";
+import Breadcrumbs from "../../../../components/Breadcrumbs";
+import Alert from "../../../../components/Alert";
+import ProductCard from "../../../../components/ProductCard";
 
 export default function CategoryPage({ params }: { params: Promise<{ id: string }> }) {
   const resolvedParams = use(params);

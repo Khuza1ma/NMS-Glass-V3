@@ -1,37 +1,4 @@
-export interface ProductVariant {
-  name: string;
-  description?: string;
-  images: string[];
-  videos?: string[];
-  specs?: Record<string, string>;
-}
-
-export interface Product {
-  id: string;
-  name: string;
-  description: string;
-  features?: string[];
-  specs?: Record<string, string>;
-  images: string[];
-  videos?: string[];
-  variants?: ProductVariant[];
-}
-
-export interface SubCategory {
-  id: string;
-  name: string;
-  description: string;
-  image: string;
-  products: Product[];
-}
-
-export interface Category {
-  id: string;
-  name: string;
-  description: string;
-  image: string;
-  subcategories: SubCategory[];
-}
+import { ProductVariant, Product, SubCategory, Category } from "./types";
 
 export const CATEGORIES: Category[] = [
   {

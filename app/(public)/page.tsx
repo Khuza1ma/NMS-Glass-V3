@@ -6,11 +6,12 @@ import { motion } from "framer-motion";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { getCategories, getSiteSettings, SiteSettings, FALLBACK_SETTINGS, supabase } from "../supabase";
+import { getCategories, getSiteSettings, FALLBACK_SETTINGS, submitInquiry } from "../supabase";
+import { SiteSettings } from "../types";
 import { CATEGORIES as FALLBACK_CATEGORIES } from "../products";
 import SafeImage from "../SafeImage";
 import { FiArrowRight, FiSend, FiMessageCircle } from "react-icons/fi";
-import Alert from "../components/Alert";
+import Alert from "../../components/Alert";
 
 const inquirySchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
@@ -81,19 +82,17 @@ export default function Home() {
 
   const onSubmit = async (data: InquiryFormData) => {
     try {
-      const { error } = await supabase.from("inquiries").insert([
-        {
-          name: data.name,
-          phone: data.phone,
-          email: data.email || null,
-          category: data.category,
-          message: data.message,
-        },
-      ]);
+      const res = await submitInquiry({
+        name: data.name,
+        phone: data.phone,
+        email: data.email || null,
+        category: data.category,
+        message: data.message,
+      });
 
-      if (error) {
-        alert("Database Error: " + error.message);
-        console.error("Supabase Error details:", error);
+      if (!res.success) {
+        alert("Database Error: " + (res.error?.message || "Failed to submit inquiry"));
+        console.error("Supabase Error details:", res.error);
         return;
       }
 

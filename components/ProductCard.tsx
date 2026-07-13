@@ -1,14 +1,8 @@
 import React from "react";
 import Link from "next/link";
 import { FiChevronRight } from "react-icons/fi";
-import SafeImage from "../SafeImage";
-
-interface Product {
-  id: string;
-  name: string;
-  description: string;
-  images: string[];
-}
+import SafeImage from "../app/SafeImage";
+import { Product } from "../app/types";
 
 interface ProductCardProps {
   product: Product;
