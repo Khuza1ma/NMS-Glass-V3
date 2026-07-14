@@ -1,19 +1,25 @@
 "use client";
 
 import React, { useState } from "react";
+import Image, { ImageProps } from "next/image";
 
-interface SafeImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {
+interface SafeImageProps extends Omit<ImageProps, "src" | "alt"> {
+  src?: string;
+  alt?: string;
   fallbackSrc?: string;
 }
 
 export default function SafeImage({
   src,
-  alt,
+  alt = "",
   className,
   fallbackSrc = "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80",
+  width,
+  height,
+  fill,
   ...props
 }: SafeImageProps) {
-  const [imgSrc, setImgSrc] = useState(src);
+  const [imgSrc, setImgSrc] = useState(src || fallbackSrc);
   const [isError, setIsError] = useState(false);
 
   const handleError = () => {
@@ -23,13 +29,19 @@ export default function SafeImage({
     }
   };
 
+  // If neither width/height nor fill is defined, default to fill mode
+  const useFill = fill !== undefined ? fill : (!width && !height);
+
   return (
-    // eslint-disable-next-line @next/next/no-img-element
-    <img
-      src={imgSrc || fallbackSrc}
+    <Image
+      src={imgSrc}
       alt={alt}
       className={className}
       onError={handleError}
+      width={useFill ? undefined : (width as number || 800)}
+      height={useFill ? undefined : (height as number || 600)}
+      fill={useFill}
+      sizes={useFill ? "(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" : undefined}
       {...props}
     />
   );

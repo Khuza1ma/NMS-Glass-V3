@@ -1,29 +1,18 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React from "react";
 import Link from "next/link";
-import { getSiteSettings, FALLBACK_SETTINGS } from "@/lib/supabase";
+import { FALLBACK_SETTINGS } from "@/lib/supabase";
 import { SiteSettings } from "@/lib/types";
 import { FiMail, FiPhone, FiMapPin, FiClock } from "react-icons/fi";
 import { FaLinkedin, FaInstagram, FaPhoneAlt } from "react-icons/fa";
 
-export default function Footer() {
-  const [settings, setSettings] = useState<SiteSettings>(FALLBACK_SETTINGS);
-  const [mounted, setMounted] = useState(false);
+interface FooterProps {
+  settings?: SiteSettings;
+}
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setMounted(true);
-    }, 0);
-    async function loadSettings() {
-      const data = await getSiteSettings();
-      setSettings(data);
-    }
-    loadSettings();
-    return () => clearTimeout(timer);
-  }, []);
-
-  const cleanPhone = (!mounted ? FALLBACK_SETTINGS.phone : settings.phone).replace(/\s+/g, "");
+export default function Footer({ settings = FALLBACK_SETTINGS }: FooterProps) {
+  const cleanPhone = settings.phone.replace(/\s+/g, "");
 
   return (
     <footer className="bg-neutral-950 border-t border-white/5 text-neutral-400 pt-16 pb-8">
@@ -33,19 +22,19 @@ export default function Footer() {
           <div className="md:col-span-2 space-y-4">
             <Link href="/" className="flex items-center space-x-3 group">
               <span className="h-10 w-10 rounded-lg bg-gradient-to-tr from-sky-500 to-indigo-600 flex items-center justify-center text-white font-bold text-xl shadow-md shadow-sky-500/20">
-                {(!mounted ? FALLBACK_SETTINGS.logo_text : settings.logo_text).charAt(0)}
+                {settings.logo_text.charAt(0)}
               </span>
               <div className="flex flex-col">
                 <span className="text-white font-extrabold text-xl tracking-wider leading-none">
-                  {!mounted ? FALLBACK_SETTINGS.logo_text : settings.logo_text}
+                  {settings.logo_text}
                 </span>
                 <span className="text-neutral-400 text-xs tracking-widest mt-0.5">
-                  {!mounted ? FALLBACK_SETTINGS.logo_subtext : settings.logo_subtext}
+                  {settings.logo_subtext}
                 </span>
               </div>
             </Link>
             <p className="text-neutral-400 text-sm leading-relaxed max-w-sm">
-              {!mounted ? FALLBACK_SETTINGS.site_subtitle : settings.site_subtitle}
+              {settings.site_subtitle}
             </p>
             {/* Social media connections */}
             <div className="pt-2">

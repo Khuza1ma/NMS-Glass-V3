@@ -2,26 +2,19 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { getSiteSettings, FALLBACK_SETTINGS } from "@/lib/supabase";
+import { FALLBACK_SETTINGS } from "@/lib/supabase";
 import { SiteSettings } from "@/lib/types";
 import { FiMenu, FiX, FiPhone, FiMessageCircle } from "react-icons/fi";
 
-export default function Navbar() {
+interface NavbarProps {
+  settings?: SiteSettings;
+}
+
+export default function Navbar({ settings = FALLBACK_SETTINGS }: NavbarProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [settings, setSettings] = useState<SiteSettings>(FALLBACK_SETTINGS);
-  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setMounted(true);
-    }, 0);
-    async function loadSettings() {
-      const data = await getSiteSettings();
-      setSettings(data);
-    }
-    loadSettings();
-
     const handleScroll = () => {
       if (window.scrollY > 20) {
         setScrolled(true);
@@ -31,12 +24,11 @@ export default function Navbar() {
     };
     window.addEventListener("scroll", handleScroll);
     return () => {
-      clearTimeout(timer);
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
 
-  const cleanPhone = (!mounted ? FALLBACK_SETTINGS.phone : settings.phone).replace(/\s+/g, "");
+  const cleanPhone = settings.phone.replace(/\s+/g, "");
 
   return (
     <nav
@@ -52,14 +44,14 @@ export default function Navbar() {
           <div className="flex-shrink-0">
             <Link href="/" className="flex items-center space-x-3 group">
               <span className="h-10 w-10 rounded-lg bg-gradient-to-tr from-sky-500 to-indigo-600 flex items-center justify-center text-white font-bold text-xl shadow-md shadow-sky-500/20 group-hover:scale-105 transition-transform duration-300">
-                {(!mounted ? FALLBACK_SETTINGS.logo_text : settings.logo_text).charAt(0)}
+                {settings.logo_text.charAt(0)}
               </span>
               <div className="flex flex-col">
                 <span className="text-white font-extrabold text-xl tracking-wider leading-none">
-                  {!mounted ? FALLBACK_SETTINGS.logo_text : settings.logo_text}
+                  {settings.logo_text}
                 </span>
                 <span className="text-neutral-400 text-xs tracking-widest mt-0.5">
-                  {!mounted ? FALLBACK_SETTINGS.logo_subtext : settings.logo_subtext}
+                  {settings.logo_subtext}
                 </span>
               </div>
             </Link>
