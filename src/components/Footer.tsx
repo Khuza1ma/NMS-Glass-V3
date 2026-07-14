@@ -38,7 +38,9 @@ export default function Footer({ settings = FALLBACK_SETTINGS }: FooterProps) {
             </p>
             {/* Social media connections */}
             <div className="pt-2">
-              <h4 className="text-white font-bold text-xs tracking-wider uppercase mb-3">Connect with Us</h4>
+              <h4 className="text-white font-bold text-xs tracking-wider uppercase mb-3">
+                Connect with Us
+              </h4>
               <div className="flex items-center space-x-4">
                 {settings.justdial_url && (
                   <a
@@ -80,23 +82,33 @@ export default function Footer({ settings = FALLBACK_SETTINGS }: FooterProps) {
 
           {/* Quick links */}
           <div>
-            <h4 className="text-white font-bold text-sm tracking-wider uppercase mb-4">Quick Links</h4>
+            <h4 className="text-white font-bold text-sm tracking-wider uppercase mb-4">
+              Quick Links
+            </h4>
             <ul className="space-y-2 text-sm">
               <li>
-                <Link href="/" className="hover:text-white transition-colors">Home</Link>
+                <Link href="/" className="hover:text-white transition-colors">
+                  Home
+                </Link>
               </li>
               <li>
-                <Link href="/#categories" className="hover:text-white transition-colors">Products</Link>
+                <Link href="/#categories" className="hover:text-white transition-colors">
+                  Products
+                </Link>
               </li>
               <li>
-                <Link href="/#contact" className="hover:text-white transition-colors">Inquiry Form</Link>
+                <Link href="/#contact" className="hover:text-white transition-colors">
+                  Inquiry Form
+                </Link>
               </li>
             </ul>
           </div>
 
           {/* Contact Details */}
           <div>
-            <h4 className="text-white font-bold text-sm tracking-wider uppercase mb-4">Contact Info</h4>
+            <h4 className="text-white font-bold text-sm tracking-wider uppercase mb-4">
+              Contact Info
+            </h4>
             <ul className="space-y-3 text-sm">
               <li className="flex items-start gap-2.5">
                 <FiMapPin className="text-sky-400 mt-1 flex-shrink-0" />
@@ -111,11 +123,15 @@ export default function Footer({ settings = FALLBACK_SETTINGS }: FooterProps) {
               </li>
               <li className="flex items-center gap-2.5">
                 <FiPhone className="text-sky-400 flex-shrink-0" />
-                <a href={`tel:${cleanPhone}`} className="hover:text-white transition-colors">{settings.phone}</a>
+                <a href={`tel:${cleanPhone}`} className="hover:text-white transition-colors">
+                  {settings.phone}
+                </a>
               </li>
               <li className="flex items-center gap-2.5">
                 <FiMail className="text-sky-400 flex-shrink-0" />
-                <a href={`mailto:${settings.email}`} className="hover:text-white transition-colors">{settings.email}</a>
+                <a href={`mailto:${settings.email}`} className="hover:text-white transition-colors">
+                  {settings.email}
+                </a>
               </li>
               <li className="flex items-center gap-2.5">
                 <FiClock className="text-sky-400 flex-shrink-0" />
@@ -127,7 +143,10 @@ export default function Footer({ settings = FALLBACK_SETTINGS }: FooterProps) {
 
         {/* Bottom banner */}
         <div className="pt-8 border-t border-white/5 text-center text-xs text-neutral-500">
-          <p>Copyright © {new Date().getFullYear()} | {settings.logo_text} Glass & Aluminium. All rights reserved.</p>
+          <p>
+            Copyright © {new Date().getFullYear()} | {settings.logo_text} Glass & Aluminium. All
+            rights reserved.
+          </p>
         </div>
       </div>
     </footer>

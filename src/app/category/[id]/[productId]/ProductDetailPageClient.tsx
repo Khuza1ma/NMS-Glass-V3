@@ -81,7 +81,9 @@ export default function ProductDetailPageClient({
                     key={i}
                     onClick={() => setActiveImage(img)}
                     className={`aspect-square rounded-lg overflow-hidden border transition-all ${
-                      activeImage === img ? "border-sky-500 scale-95" : "border-white/5 hover:border-white/20"
+                      activeImage === img
+                        ? "border-sky-500 scale-95"
+                        : "border-white/5 hover:border-white/20"
                     }`}
                   >
                     <SafeImage src={img} alt="" className="w-full h-full object-cover" />
@@ -97,7 +99,9 @@ export default function ProductDetailPageClient({
               <span className="text-xs font-semibold uppercase tracking-widest text-sky-400">
                 {subcategory.name}
               </span>
-              <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight mt-1">{product.name}</h1>
+              <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight mt-1">
+                {product.name}
+              </h1>
               <p className="text-neutral-300 text-sm mt-4 leading-relaxed font-light">
                 {product.description}
               </p>
@@ -106,7 +110,9 @@ export default function ProductDetailPageClient({
             {/* Core Features */}
             {product.features && product.features.length > 0 && (
               <div className="space-y-3">
-                <h3 className="text-sm font-semibold tracking-wider text-neutral-400 uppercase">Key Features</h3>
+                <h3 className="text-sm font-semibold tracking-wider text-neutral-400 uppercase">
+                  Key Features
+                </h3>
                 <ul className="space-y-2">
                   {product.features.map((feature: string, i: number) => (
                     <li key={i} className="flex items-start gap-2.5 text-xs text-neutral-300">
@@ -121,10 +127,15 @@ export default function ProductDetailPageClient({
             {/* Technical Specifications */}
             {product.specs && (
               <div className="space-y-3 border-t border-white/5 pt-6">
-                <h3 className="text-sm font-semibold tracking-wider text-neutral-400 uppercase">Technical Specifications</h3>
+                <h3 className="text-sm font-semibold tracking-wider text-neutral-400 uppercase">
+                  Technical Specifications
+                </h3>
                 <div className="grid grid-cols-1 gap-2">
                   {Object.entries(product.specs).map(([key, val]: [string, string]) => (
-                    <div key={key} className="flex justify-between items-center text-xs py-1 border-b border-white/5">
+                    <div
+                      key={key}
+                      className="flex justify-between items-center text-xs py-1 border-b border-white/5"
+                    >
                       <span className="text-neutral-400">{key}</span>
                       <span className="text-white font-medium text-right">{val}</span>
                     </div>
@@ -168,12 +179,18 @@ export default function ProductDetailPageClient({
                   className="flex flex-col sm:flex-row gap-6 border border-white/5 bg-neutral-900/40 rounded-2xl p-6 hover:bg-neutral-900 transition-colors"
                 >
                   <div className="w-full sm:w-1/3 aspect-[4/3] rounded-xl overflow-hidden bg-neutral-950">
-                    <SafeImage src={v.images[0]} alt={v.name} className="w-full h-full object-cover" />
+                    <SafeImage
+                      src={v.images[0]}
+                      alt={v.name}
+                      className="w-full h-full object-cover"
+                    />
                   </div>
                   <div className="w-full sm:w-2/3 flex flex-col justify-between">
                     <div className="space-y-2">
                       <h4 className="text-lg font-bold text-white">{v.name}</h4>
-                      {v.description && <p className="text-xs text-neutral-400 leading-relaxed">{v.description}</p>}
+                      {v.description && (
+                        <p className="text-xs text-neutral-400 leading-relaxed">{v.description}</p>
+                      )}
                     </div>
 
                     <button

@@ -42,34 +42,38 @@ export default function CategoryPageClient({ category, error }: CategoryPageClie
               <span>Back to Services</span>
             </Link>
             <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight">{category.name}</h1>
-            <p className="text-neutral-300 text-sm sm:text-base leading-relaxed">{category.description}</p>
+            <p className="text-neutral-300 text-sm sm:text-base leading-relaxed">
+              {category.description}
+            </p>
           </div>
         </div>
 
         {/* Subcategories list */}
         <div className="space-y-16">
-          {category.subcategories && category.subcategories.map((sub: SubCategory, index: number) => (
-            <motion.div
-              key={sub.id}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="space-y-8"
-            >
-              <div className="border-b border-white/5 pb-4">
-                <h2 className="text-2xl sm:text-3xl font-bold">{sub.name}</h2>
-                <p className="text-sm text-neutral-400 mt-1">{sub.description}</p>
-              </div>
+          {category.subcategories &&
+            category.subcategories.map((sub: SubCategory, index: number) => (
+              <motion.div
+                key={sub.id}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                className="space-y-8"
+              >
+                <div className="border-b border-white/5 pb-4">
+                  <h2 className="text-2xl sm:text-3xl font-bold">{sub.name}</h2>
+                  <p className="text-sm text-neutral-400 mt-1">{sub.description}</p>
+                </div>
 
-              {/* Products inside this subcategory */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {sub.products && sub.products.map((product: Product) => (
-                  <ProductCard key={product.id} product={product} categoryId={category.id} />
-                ))}
-              </div>
-            </motion.div>
-          ))}
+                {/* Products inside this subcategory */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                  {sub.products &&
+                    sub.products.map((product: Product) => (
+                      <ProductCard key={product.id} product={product} categoryId={category.id} />
+                    ))}
+                </div>
+              </motion.div>
+            ))}
         </div>
       </div>
     </div>

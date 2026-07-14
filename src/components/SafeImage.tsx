@@ -30,7 +30,7 @@ export default function SafeImage({
   };
 
   // If neither width/height nor fill is defined, default to fill mode
-  const useFill = fill !== undefined ? fill : (!width && !height);
+  const useFill = fill !== undefined ? fill : !width && !height;
 
   return (
     <Image
@@ -38,8 +38,8 @@ export default function SafeImage({
       alt={alt}
       className={className}
       onError={handleError}
-      width={useFill ? undefined : (width as number || 800)}
-      height={useFill ? undefined : (height as number || 600)}
+      width={useFill ? undefined : (width as number) || 800}
+      height={useFill ? undefined : (height as number) || 600}
       fill={useFill}
       sizes={useFill ? "(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" : undefined}
       {...props}

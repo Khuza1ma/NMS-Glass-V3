@@ -59,13 +59,22 @@ export default function Navbar({ settings = FALLBACK_SETTINGS }: NavbarProps) {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
-            <Link href="/" className="text-neutral-300 hover:text-white transition-colors text-sm font-medium">
+            <Link
+              href="/"
+              className="text-neutral-300 hover:text-white transition-colors text-sm font-medium"
+            >
               Home
             </Link>
-            <Link href="/#categories" className="text-neutral-300 hover:text-white transition-colors text-sm font-medium">
+            <Link
+              href="/#categories"
+              className="text-neutral-300 hover:text-white transition-colors text-sm font-medium"
+            >
               Products
             </Link>
-            <Link href="/#contact" className="text-neutral-300 hover:text-white transition-colors text-sm font-medium">
+            <Link
+              href="/#contact"
+              className="text-neutral-300 hover:text-white transition-colors text-sm font-medium"
+            >
               Contact
             </Link>
             <a

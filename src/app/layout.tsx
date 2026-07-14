@@ -17,7 +17,8 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "NMS | Premium Aluminum, Fiber & Mosquito Net Solutions",
-  description: "Discover premium, customized architectural aluminum doors, windows, durable glass-fiber partitions, composite kitchens, and luxury retractable pleated mosquito screens at NMS.",
+  description:
+    "Discover premium, customized architectural aluminum doors, windows, durable glass-fiber partitions, composite kitchens, and luxury retractable pleated mosquito screens at NMS.",
 };
 
 export default async function RootLayout({

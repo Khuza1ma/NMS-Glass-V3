@@ -96,7 +96,8 @@ export default function ClientHome({ initialCategories, settings }: ClientHomePr
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.1 }}
           >
-            {settings.logo_text} Custom Glass, <br />Aluminum & Fiber Solutions
+            {settings.logo_text} Custom Glass, <br />
+            Aluminum & Fiber Solutions
           </motion.h1>
 
           <motion.p
@@ -132,11 +133,15 @@ export default function ClientHome({ initialCategories, settings }: ClientHomePr
       </section>
 
       {/* Categories Grid Section */}
-      <section id="categories" className="py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full border-t border-white/5">
+      <section
+        id="categories"
+        className="py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full border-t border-white/5"
+      >
         <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
           <h2 className="text-3xl md:text-5xl font-bold tracking-tight">Browse Services</h2>
           <p className="text-neutral-400">
-            We deliver state-of-the-art aluminum windows, custom fiber kitchens, and premium sliding mosquito protection screens.
+            We deliver state-of-the-art aluminum windows, custom fiber kitchens, and premium sliding
+            mosquito protection screens.
           </p>
         </div>
 
@@ -174,7 +179,10 @@ export default function ClientHome({ initialCategories, settings }: ClientHomePr
                   <div className="pt-4 flex flex-wrap gap-2">
                     {category.subcategories &&
                       category.subcategories.map((sub: SubCategory) => (
-                        <span key={sub.id} className="text-xs text-neutral-400 bg-neutral-900 border border-white/5 px-2.5 py-1 rounded-md">
+                        <span
+                          key={sub.id}
+                          className="text-xs text-neutral-400 bg-neutral-900 border border-white/5 px-2.5 py-1 rounded-md"
+                        >
                           {sub.name}
                         </span>
                       ))}
@@ -204,9 +212,13 @@ export default function ClientHome({ initialCategories, settings }: ClientHomePr
               <span className="px-3 py-1 text-xs font-semibold uppercase tracking-widest text-indigo-400 bg-indigo-400/10 border border-indigo-400/20 rounded-full self-start">
                 Quick Support & Inquiries
               </span>
-              <h2 className="text-3xl sm:text-5xl font-bold tracking-tight text-white">Let&apos;s Build Your Project Together</h2>
+              <h2 className="text-3xl sm:text-5xl font-bold tracking-tight text-white">
+                Let&apos;s Build Your Project Together
+              </h2>
               <p className="text-neutral-400 leading-relaxed text-lg">
-                Require customized measurements, structural blueprints, or pricing details? Fill out our brief inquiry form or chat directly with our design engineering team on WhatsApp.
+                Require customized measurements, structural blueprints, or pricing details? Fill out
+                our brief inquiry form or chat directly with our design engineering team on
+                WhatsApp.
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4 pt-4">
@@ -230,42 +242,56 @@ export default function ClientHome({ initialCategories, settings }: ClientHomePr
 
               <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                 <div>
-                  <label className="block text-xs font-medium text-neutral-400 uppercase tracking-wider mb-2">Your Name</label>
+                  <label className="block text-xs font-medium text-neutral-400 uppercase tracking-wider mb-2">
+                    Your Name
+                  </label>
                   <input
                     type="text"
                     {...register("name")}
                     placeholder="Enter your full name"
                     className="w-full bg-neutral-950 border border-white/10 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-sky-500 transition-colors"
                   />
-                  {errors.name && <p className="text-xs text-red-500 mt-1">{errors.name.message}</p>}
+                  {errors.name && (
+                    <p className="text-xs text-red-500 mt-1">{errors.name.message}</p>
+                  )}
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-xs font-medium text-neutral-400 uppercase tracking-wider mb-2">Phone Number</label>
+                    <label className="block text-xs font-medium text-neutral-400 uppercase tracking-wider mb-2">
+                      Phone Number
+                    </label>
                     <input
                       type="text"
                       {...register("phone")}
                       placeholder={`e.g. ${settings.phone}`}
                       className="w-full bg-neutral-950 border border-white/10 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-sky-500 transition-colors"
                     />
-                    {errors.phone && <p className="text-xs text-red-500 mt-1">{errors.phone.message}</p>}
+                    {errors.phone && (
+                      <p className="text-xs text-red-500 mt-1">{errors.phone.message}</p>
+                    )}
                   </div>
 
                   <div>
-                    <label className="block text-xs font-medium text-neutral-400 uppercase tracking-wider mb-2">Email Address (Optional)</label>
+                    <label className="block text-xs font-medium text-neutral-400 uppercase tracking-wider mb-2">
+                      Email Address (Optional)
+                    </label>
                     <input
                       type="email"
                       {...register("email")}
                       placeholder="e.g. name@domain.com"
                       className="w-full bg-neutral-950 border border-white/10 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-sky-500 transition-colors"
                     />
-                    {errors.email && <p className="text-xs text-red-500 mt-1">{errors.email.message}</p>}
+                    {errors.email && (
+                      <p className="text-xs text-red-500 mt-1">{errors.email.message}</p>
+                    )}
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-xs font-medium text-neutral-400 uppercase tracking-wider mb-2">Service Category Interested In</label>
+                  <label className="block text-xs font-medium text-neutral-400 uppercase tracking-wider mb-2">
+                    Service Category Interested In
+                  </label>
                   <select
                     {...register("category")}
                     className="w-full bg-neutral-950 border border-white/10 rounded-xl px-4 py-3 text-neutral-300 text-sm focus:outline-none focus:border-sky-500 transition-colors"
@@ -277,18 +303,24 @@ export default function ClientHome({ initialCategories, settings }: ClientHomePr
                       </option>
                     ))}
                   </select>
-                  {errors.category && <p className="text-xs text-red-500 mt-1">{errors.category.message}</p>}
+                  {errors.category && (
+                    <p className="text-xs text-red-500 mt-1">{errors.category.message}</p>
+                  )}
                 </div>
 
                 <div>
-                  <label className="block text-xs font-medium text-neutral-400 uppercase tracking-wider mb-2">Project Brief / Inquiry Details</label>
+                  <label className="block text-xs font-medium text-neutral-400 uppercase tracking-wider mb-2">
+                    Project Brief / Inquiry Details
+                  </label>
                   <textarea
                     rows={4}
                     {...register("message")}
                     placeholder="Provide details on dimensions, requirements, or custom configurations..."
                     className="w-full bg-neutral-950 border border-white/10 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-sky-500 transition-colors resize-none"
                   ></textarea>
-                  {errors.message && <p className="text-xs text-red-500 mt-1">{errors.message.message}</p>}
+                  {errors.message && (
+                    <p className="text-xs text-red-500 mt-1">{errors.message.message}</p>
+                  )}
                 </div>
 
                 <button
