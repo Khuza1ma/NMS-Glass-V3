@@ -32,6 +32,7 @@ export default function CategoryPageClient({ category, error }: CategoryPageClie
             src={category.image}
             alt={category.name}
             className="absolute inset-0 w-full h-full object-cover opacity-35 -z-10"
+            priority={true}
           />
           <div className="relative z-20 space-y-4 max-w-2xl">
             <Link

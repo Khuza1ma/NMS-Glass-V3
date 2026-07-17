@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { Category, SubCategory, Product, ProductVariant } from "@/lib/types";
 import SafeImage from "@/components/SafeImage";
-import { FiArrowLeft, FiCheckCircle, FiPhone, FiMessageCircle } from "react-icons/fi";
+import { FiArrowLeft, FiCheckCircle, FiPhone, FiMessageCircle, FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import Alert from "@/components/Alert";
 
@@ -24,19 +24,23 @@ export default function ProductDetailPageClient({
   error,
 }: ProductDetailPageClientProps) {
   const { product, subcategory, category } = productData;
-  const [activeImage, setActiveImage] = useState(product.images[0] || "");
-
-  // Aggregate all gallery images
-  const allImages = [...product.images];
+  
+  // Aggregate all gallery images safely
+  const allImages = product.images ? [...product.images] : [];
   if (product.variants) {
     product.variants.forEach((v: ProductVariant) => {
-      v.images.forEach((img: string) => {
-        if (!allImages.includes(img)) {
-          allImages.push(img);
-        }
-      });
+      if (v.images) {
+        v.images.forEach((img: string) => {
+          if (!allImages.includes(img)) {
+            allImages.push(img);
+          }
+        });
+      }
     });
   }
+
+  const [activeImageIndex, setActiveImageIndex] = useState(0);
+  const activeImage = allImages[activeImageIndex] || "";
 
   return (
     <div className="min-h-screen bg-neutral-950 text-white py-12 px-4 sm:px-6 lg:px-8">
@@ -66,12 +70,32 @@ export default function ProductDetailPageClient({
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
           {/* Gallery Module */}
           <div className="lg:col-span-7 space-y-4">
-            <div className="aspect-[4/3] w-full rounded-2xl overflow-hidden border border-white/5 bg-neutral-900 relative">
+            <div className="aspect-[4/3] w-full rounded-2xl overflow-hidden border border-white/5 bg-neutral-900 relative group flex items-center justify-center">
               <SafeImage
                 src={activeImage}
                 alt={product.name}
                 className="w-full h-full object-cover transition-all duration-300"
+                priority={true}
               />
+              {allImages.length > 1 && (
+                <>
+                  <button
+                    onClick={() => setActiveImageIndex((prev) => (prev === 0 ? allImages.length - 1 : prev - 1))}
+                    className="absolute left-4 w-10 h-10 rounded-full bg-black/60 hover:bg-black text-white flex items-center justify-center cursor-pointer transition-all border border-white/10 opacity-0 group-hover:opacity-100"
+                  >
+                    <FiChevronLeft className="text-xl" />
+                  </button>
+                  <button
+                    onClick={() => setActiveImageIndex((prev) => (prev === allImages.length - 1 ? 0 : prev + 1))}
+                    className="absolute right-4 w-10 h-10 rounded-full bg-black/60 hover:bg-black text-white flex items-center justify-center cursor-pointer transition-all border border-white/10 opacity-0 group-hover:opacity-100"
+                  >
+                    <FiChevronRight className="text-xl" />
+                  </button>
+                  <div className="absolute bottom-4 right-4 bg-black/70 border border-white/10 px-3 py-1 rounded-full text-xs font-semibold text-neutral-300 tracking-wider">
+                    {activeImageIndex + 1} / {allImages.length}
+                  </div>
+                </>
+              )}
             </div>
 
             {allImages.length > 1 && (
@@ -79,9 +103,9 @@ export default function ProductDetailPageClient({
                 {allImages.map((img, i) => (
                   <button
                     key={i}
-                    onClick={() => setActiveImage(img)}
-                    className={`aspect-square rounded-lg overflow-hidden border transition-all ${
-                      activeImage === img
+                    onClick={() => setActiveImageIndex(i)}
+                    className={`aspect-square rounded-lg overflow-hidden border relative transition-all ${
+                      activeImageIndex === i
                         ? "border-sky-500 scale-95"
                         : "border-white/5 hover:border-white/20"
                     }`}
@@ -125,7 +149,7 @@ export default function ProductDetailPageClient({
             )}
 
             {/* Technical Specifications */}
-            {product.specs && (
+            {product.specs && typeof product.specs === "object" && Object.keys(product.specs).length > 0 && (
               <div className="space-y-3 border-t border-white/5 pt-6">
                 <h3 className="text-sm font-semibold tracking-wider text-neutral-400 uppercase">
                   Technical Specifications
@@ -178,7 +202,7 @@ export default function ProductDetailPageClient({
                   key={i}
                   className="flex flex-col sm:flex-row gap-6 border border-white/5 bg-neutral-900/40 rounded-2xl p-6 hover:bg-neutral-900 transition-colors"
                 >
-                  <div className="w-full sm:w-1/3 aspect-[4/3] rounded-xl overflow-hidden bg-neutral-950">
+                  <div className="w-full sm:w-1/3 aspect-[4/3] rounded-xl overflow-hidden bg-neutral-950 relative">
                     <SafeImage
                       src={v.images[0]}
                       alt={v.name}
@@ -194,7 +218,10 @@ export default function ProductDetailPageClient({
                     </div>
 
                     <button
-                      onClick={() => setActiveImage(v.images[0])}
+                      onClick={() => {
+                        const idx = allImages.indexOf(v.images[0]);
+                        if (idx !== -1) setActiveImageIndex(idx);
+                      }}
                       className="mt-4 text-xs font-semibold text-sky-400 hover:text-sky-300 text-left self-start"
                     >
                       View in gallery →

@@ -4,6 +4,8 @@ export interface ProductVariant {
   images: string[];
   videos?: string[];
   specs?: Record<string, string>;
+  is_deleted?: boolean;
+  updated_at?: string;
 }
 
 export interface Product {
@@ -16,6 +18,8 @@ export interface Product {
   images: string[];
   videos?: string[];
   variants?: ProductVariant[];
+  is_deleted?: boolean;
+  updated_at?: string;
 }
 
 export interface SubCategory {
@@ -25,6 +29,8 @@ export interface SubCategory {
   description: string;
   image: string;
   products?: Product[];
+  is_deleted?: boolean;
+  updated_at?: string;
 }
 
 export interface Category {
@@ -33,6 +39,8 @@ export interface Category {
   description: string;
   image: string;
   subcategories?: SubCategory[];
+  is_deleted?: boolean;
+  updated_at?: string;
 }
 
 export interface SiteSettings {
@@ -48,6 +56,8 @@ export interface SiteSettings {
   justdial_url?: string;
   linkedin_url?: string;
   instagram_url?: string;
+  is_deleted?: boolean;
+  updated_at?: string;
 }
 
 export interface Inquiry {
@@ -58,4 +68,7 @@ export interface Inquiry {
   phone: string;
   category: string;
   message: string;
+  is_deleted?: boolean;
+  updated_at?: string;
 }
+

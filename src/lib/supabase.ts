@@ -33,6 +33,7 @@ export async function getSiteSettings(): Promise<SiteSettings> {
       .from("site_settings")
       .select("*")
       .eq("id", "global_config")
+      .eq("is_deleted", false)
       .single();
 
     if (error) throw error;
@@ -49,6 +50,7 @@ export async function getCategories(): Promise<Category[]> {
     const { data, error } = await supabase
       .from("categories")
       .select("*")
+      .eq("is_deleted", false)
       .order("created_at", { ascending: true });
 
     if (error) throw error;
@@ -66,6 +68,7 @@ export async function getCategoryDetails(categoryId: string): Promise<Category |
       .from("categories")
       .select("*")
       .eq("id", categoryId)
+      .eq("is_deleted", false)
       .single();
 
     if (catError) throw catError;
@@ -75,7 +78,8 @@ export async function getCategoryDetails(categoryId: string): Promise<Category |
     const { data: subcategories, error: subError } = await supabase
       .from("subcategories")
       .select("*")
-      .eq("category_id", categoryId);
+      .eq("category_id", categoryId)
+      .eq("is_deleted", false);
 
     if (subError) throw subError;
 
@@ -87,7 +91,8 @@ export async function getCategoryDetails(categoryId: string): Promise<Category |
       const { data: prods, error: prodError } = await supabase
         .from("products")
         .select("*")
-        .in("subcategory_id", subIds);
+        .in("subcategory_id", subIds)
+        .eq("is_deleted", false);
 
       if (prodError) throw prodError;
       products = prods || [];
@@ -115,6 +120,7 @@ export async function getProductDetails(productId: string) {
       .from("products")
       .select("*")
       .eq("id", productId)
+      .eq("is_deleted", false)
       .single();
 
     if (prodError) throw prodError;
@@ -125,6 +131,7 @@ export async function getProductDetails(productId: string) {
       .from("subcategories")
       .select("*")
       .eq("id", product.subcategory_id)
+      .eq("is_deleted", false)
       .single();
 
     if (subError) throw subError;
@@ -134,6 +141,7 @@ export async function getProductDetails(productId: string) {
       .from("categories")
       .select("*")
       .eq("id", subcategory.category_id)
+      .eq("is_deleted", false)
       .single();
 
     if (catError) throw catError;
@@ -142,7 +150,8 @@ export async function getProductDetails(productId: string) {
     const { data: variants } = await supabase
       .from("product_variants")
       .select("*")
-      .eq("product_id", productId);
+      .eq("product_id", productId)
+      .eq("is_deleted", false);
 
     return {
       product: {
