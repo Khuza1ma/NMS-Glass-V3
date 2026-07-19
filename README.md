@@ -1,36 +1,62 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# NMS Portfolio Website (NMS Glass)
 
-## Getting Started
+A premium, modern architectural portfolio and service catalogue website built for **NMS Glass, Aluminum & Fiber Solutions**. It serves as the client-facing storefront, displaying service categories, nested subcategories, product specs, and capturing inquiries.
 
-First, run the development server:
+## 🚀 Features
+
+- **🌐 Dynamic Showcase**: Automatically fetches and renders architectural services, parent categories, and nested subcategories directly from the Supabase database.
+- **✨ Premium Glassmorphism UI**: Beautifully designed dark-mode layout with custom glassmorphism effects, smooth animations (via Framer Motion), and micro-interactions.
+- **💬 WhatsApp Sales Integration**: Instant WhatsApp quick-chats generated dynamically using clean phone numbers from global configurations.
+- **✉️ Zod-Validated Contact Form**: A robust inquiries form allowing potential clients to submit project requirements. Automatically registers entries in the Supabase inquiries table (monitored by the NMS Admin Panel).
+- **📱 Fully Responsive**: Seamless, high-fidelity experience optimized across mobile, tablet, and desktop screens.
+
+## 🛠️ Tech Stack
+
+- **Framework**: Next.js 16.2 (App Router)
+- **Library**: React 19
+- **Database**: Supabase
+- **Styling**: TailwindCSS 4, React Icons
+- **Animation**: Framer Motion
+- **Form Handling / Validation**: React Hook Form, Zod
+- **Testing / Formatting**: Vitest, Prettier, ESLint
+
+## 📦 Getting Started
+
+### 1. Prerequisites
+
+Ensure you have [Node.js](https://nodejs.org/) and `pnpm` installed.
+
+### 2. Installation
+
+Install project dependencies:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+pnpm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 3. Environment Variables
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Create a `.env.local` file in the root directory and populate it with your Supabase credentials:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```env
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+```
 
-## Learn More
+### 4. Running the Development Server
 
-To learn more about Next.js, take a look at the following resources:
+Start the Next.js development server:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+pnpm dev
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Open [http://localhost:3000](http://localhost:3000) (or the assigned port) with your browser to view the client-facing website.
 
-## Deploy on Vercel
+### 5. Running Production Build
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Build the project for production deployment:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+pnpm run build
+```
