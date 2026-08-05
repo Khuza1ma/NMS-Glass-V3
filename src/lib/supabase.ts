@@ -167,6 +167,30 @@ export async function getProductDetails(productId: string) {
   }
 }
 
+export function extractErrorMessage(err: unknown): string {
+  if (!err) return "An unknown error occurred.";
+  if (typeof err === "string") return err;
+  if (err instanceof Error) return err.message;
+  if (typeof err === "object") {
+    const obj = err as Record<string, unknown>;
+    if (typeof obj.message === "string" && obj.message && obj.message !== "[object Object]") {
+      return obj.message;
+    }
+    if (typeof obj.error_description === "string" && obj.error_description) {
+      return obj.error_description;
+    }
+    if (typeof obj.details === "string" && obj.details) {
+      return obj.details;
+    }
+    try {
+      return JSON.stringify(err);
+    } catch {
+      return String(err);
+    }
+  }
+  return String(err);
+}
+
 // Submit inquiry to Supabase
 export async function submitInquiry(
   inquiry: Inquiry
@@ -180,7 +204,7 @@ export async function submitInquiry(
     console.error("Error submitting inquiry to Supabase:", err);
     return {
       success: false,
-      error: err instanceof Error ? err : { message: String(err) },
+      error: { message: extractErrorMessage(err) },
     };
   }
 }

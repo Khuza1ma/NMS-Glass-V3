@@ -28,7 +28,7 @@ export default function Footer({ settings = FALLBACK_SETTINGS }: FooterProps) {
                 <span className="text-white font-extrabold text-xl tracking-wider leading-none">
                   {settings.logo_text}
                 </span>
-                <span className="text-neutral-400 text-xs tracking-widest mt-0.5">
+                <span className="text-neutral-400 text-[10px] sm:text-xs tracking-wider sm:tracking-widest mt-0.5">
                   {settings.logo_subtext}
                 </span>
               </div>
@@ -41,7 +41,7 @@ export default function Footer({ settings = FALLBACK_SETTINGS }: FooterProps) {
               <h4 className="text-white font-bold text-xs tracking-wider uppercase mb-3">
                 Connect with Us
               </h4>
-              <div className="flex items-center space-x-4">
+              <div className="flex flex-wrap items-center gap-3">
                 {settings.justdial_url && (
                   <a
                     href={settings.justdial_url}

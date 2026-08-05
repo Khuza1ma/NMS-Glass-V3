@@ -50,7 +50,7 @@ export default function Navbar({ settings = FALLBACK_SETTINGS }: NavbarProps) {
                 <span className="text-white font-extrabold text-xl tracking-wider leading-none">
                   {settings.logo_text}
                 </span>
-                <span className="text-neutral-400 text-xs tracking-widest mt-0.5">
+                <span className="text-neutral-400 text-[10px] sm:text-xs tracking-wider sm:tracking-widest mt-0.5 truncate max-w-[170px] sm:max-w-none">
                   {settings.logo_subtext}
                 </span>
               </div>

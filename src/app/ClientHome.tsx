@@ -6,11 +6,12 @@ import { motion } from "framer-motion";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { submitInquiry } from "@/lib/supabase";
+import { submitInquiry, extractErrorMessage } from "@/lib/supabase";
 import { SiteSettings, Category, SubCategory } from "@/lib/types";
 import SafeImage from "@/components/SafeImage";
 import { FiArrowRight, FiSend, FiMessageCircle } from "react-icons/fi";
 import Alert from "@/components/Alert";
+import Toast, { ToastMessage } from "@/components/Toast";
 
 const inquirySchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
@@ -28,6 +29,9 @@ interface ClientHomeProps {
 }
 
 export default function ClientHome({ initialCategories, settings }: ClientHomeProps) {
+  const [toast, setToast] = useState<ToastMessage | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const {
     register,
     handleSubmit,
@@ -45,6 +49,7 @@ export default function ClientHome({ initialCategories, settings }: ClientHomePr
   });
 
   const onSubmit = async (data: InquiryFormData) => {
+    setIsSubmitting(true);
     try {
       const res = await submitInquiry({
         name: data.name,
@@ -55,17 +60,32 @@ export default function ClientHome({ initialCategories, settings }: ClientHomePr
       });
 
       if (!res.success) {
-        alert("Database Error: " + (res.error?.message || "Failed to submit inquiry"));
+        const errorMsg = res.error?.message || "Failed to submit inquiry";
         console.error("Supabase Error details:", res.error);
+        setToast({
+          type: "error",
+          title: "Submission Error",
+          message: errorMsg,
+        });
         return;
       }
 
-      alert("Thank you! Your inquiry has been sent successfully.");
+      setToast({
+        type: "success",
+        title: "Inquiry Sent!",
+        message: "Thank you! Your inquiry has been sent successfully. Our team will contact you shortly.",
+      });
       reset();
     } catch (err) {
-      const errorMsg = err instanceof Error ? err.message : String(err);
+      const errorMsg = extractErrorMessage(err);
       console.error("Submission catch error:", err);
-      alert("Submission failed: " + errorMsg);
+      setToast({
+        type: "error",
+        title: "Submission Failed",
+        message: errorMsg,
+      });
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -85,7 +105,7 @@ export default function ClientHome({ initialCategories, settings }: ClientHomePr
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <span className="px-3 py-1 text-xs font-semibold uppercase tracking-widest text-sky-400 bg-sky-400/10 border border-sky-400/20 rounded-full">
+            <span className="inline-block max-w-full px-3.5 py-1 text-[11px] sm:text-xs font-semibold uppercase tracking-wider sm:tracking-widest text-sky-400 bg-sky-400/10 border border-sky-400/20 rounded-xl sm:rounded-full text-balance leading-snug">
               {settings.logo_text} Architectural & Composite Fabricators
             </span>
           </motion.div>
@@ -96,7 +116,7 @@ export default function ClientHome({ initialCategories, settings }: ClientHomePr
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.1 }}
           >
-            {settings.logo_text} Custom Glass, <br />
+            {settings.logo_text} Custom Glass, <br className="hidden sm:inline" />
             Aluminum & Fiber Solutions
           </motion.h1>
 
@@ -153,7 +173,7 @@ export default function ClientHome({ initialCategories, settings }: ClientHomePr
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="group relative rounded-2xl overflow-hidden border border-white/5 bg-neutral-900/40 backdrop-blur-sm shadow-xl flex flex-col h-[380px]"
+              className="group relative rounded-2xl overflow-hidden border border-white/5 bg-neutral-900/40 backdrop-blur-sm shadow-xl flex flex-col min-h-[380px] h-full"
             >
               {/* Image Background Cover */}
               <div className="absolute inset-0 bg-gradient-to-t from-neutral-950 via-neutral-900/60 to-transparent z-10 transition-colors group-hover:from-neutral-950/95" />
@@ -164,7 +184,7 @@ export default function ClientHome({ initialCategories, settings }: ClientHomePr
               />
 
               <div className="relative z-20 p-8 mt-auto flex flex-col h-full justify-between">
-                <span className="self-start text-xs font-semibold tracking-widest text-sky-400 uppercase bg-sky-500/10 px-3 py-1 rounded-full border border-sky-400/20">
+                <span className="inline-block self-start text-[11px] sm:text-xs font-semibold tracking-wider sm:tracking-widest text-sky-400 uppercase bg-sky-500/10 px-3 py-1 rounded-full border border-sky-400/20">
                   {settings.logo_text} Service
                 </span>
 
@@ -209,7 +229,7 @@ export default function ClientHome({ initialCategories, settings }: ClientHomePr
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
             {/* Context Details */}
             <div className="space-y-8 flex flex-col justify-center">
-              <span className="px-3 py-1 text-xs font-semibold uppercase tracking-widest text-indigo-400 bg-indigo-400/10 border border-indigo-400/20 rounded-full self-start">
+              <span className="inline-block max-w-full px-3 py-1 text-[11px] sm:text-xs font-semibold uppercase tracking-wider sm:tracking-widest text-indigo-400 bg-indigo-400/10 border border-indigo-400/20 rounded-full self-start">
                 Quick Support & Inquiries
               </span>
               <h2 className="text-3xl sm:text-5xl font-bold tracking-tight text-white">
@@ -235,7 +255,7 @@ export default function ClientHome({ initialCategories, settings }: ClientHomePr
             </div>
 
             {/* Quick Contact Form */}
-            <div className="bg-neutral-900 border border-white/5 rounded-2xl p-8 shadow-2xl relative overflow-hidden">
+            <div className="bg-neutral-900 border border-white/5 rounded-2xl p-5 sm:p-8 shadow-2xl relative overflow-hidden">
               <div className="absolute top-0 right-0 w-32 h-32 bg-sky-500/5 rounded-full blur-2xl"></div>
 
               <h3 className="text-xl font-bold mb-6 text-white">Quick Inquiry Form</h3>
@@ -325,16 +345,29 @@ export default function ClientHome({ initialCategories, settings }: ClientHomePr
 
                 <button
                   type="submit"
-                  className="w-full bg-gradient-to-r from-sky-500 to-indigo-600 hover:from-sky-600 hover:to-indigo-700 text-white font-medium py-3 rounded-xl transition-all shadow-md shadow-sky-500/10 flex items-center justify-center gap-2"
+                  disabled={isSubmitting}
+                  className="w-full bg-gradient-to-r from-sky-500 to-indigo-600 hover:from-sky-600 hover:to-indigo-700 text-white font-medium py-3 rounded-xl transition-all shadow-md shadow-sky-500/10 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  <FiSend />
-                  <span>Submit Inquiry</span>
+                  {isSubmitting ? (
+                    <>
+                      <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
+                      <span>Submitting...</span>
+                    </>
+                  ) : (
+                    <>
+                      <FiSend />
+                      <span>Submit Inquiry</span>
+                    </>
+                  )}
                 </button>
               </form>
             </div>
           </div>
         </div>
       </section>
+
+      {/* Floating Toast Notification */}
+      <Toast toast={toast} onClose={() => setToast(null)} />
     </div>
   );
 }

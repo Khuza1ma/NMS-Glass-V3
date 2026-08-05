@@ -26,7 +26,7 @@ export default function CategoryPageClient({ category, error }: CategoryPageClie
         {error && <Alert message={error} />}
 
         {/* Category Header */}
-        <div className="relative rounded-3xl overflow-hidden border border-white/5 bg-neutral-900/30 p-8 sm:p-12 md:p-16 flex flex-col justify-end min-h-[300px]">
+        <div className="relative rounded-3xl overflow-hidden border border-white/5 bg-neutral-900/30 p-6 sm:p-12 md:p-16 flex flex-col justify-end min-h-[260px] sm:min-h-[300px]">
           <div className="absolute inset-0 bg-gradient-to-t from-neutral-950 via-neutral-900/60 to-transparent z-10" />
           <SafeImage
             src={category.image}
@@ -37,7 +37,7 @@ export default function CategoryPageClient({ category, error }: CategoryPageClie
           <div className="relative z-20 space-y-4 max-w-2xl">
             <Link
               href="/"
-              className="inline-flex items-center gap-2 text-sky-400 hover:text-sky-300 text-xs font-semibold uppercase tracking-widest mb-2 transition-colors"
+              className="inline-flex items-center gap-2 text-sky-400 hover:text-sky-300 text-xs font-semibold uppercase tracking-wider sm:tracking-widest mb-2 transition-colors"
             >
               <FiArrowLeft />
               <span>Back to Services</span>

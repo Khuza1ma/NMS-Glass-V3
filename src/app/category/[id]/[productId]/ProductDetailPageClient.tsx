@@ -118,9 +118,9 @@ export default function ProductDetailPageClient({
           </div>
 
           {/* Product Specifications & Details Card */}
-          <div className="lg:col-span-5 space-y-8 bg-neutral-900/30 border border-white/5 p-8 rounded-3xl backdrop-blur-sm self-start">
+          <div className="lg:col-span-5 space-y-8 bg-neutral-900/30 border border-white/5 p-5 sm:p-8 rounded-3xl backdrop-blur-sm self-start">
             <div>
-              <span className="text-xs font-semibold uppercase tracking-widest text-sky-400">
+              <span className="inline-block max-w-full text-[11px] sm:text-xs font-semibold uppercase tracking-wider sm:tracking-widest text-sky-400">
                 {subcategory.name}
               </span>
               <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight mt-1">
@@ -158,10 +158,10 @@ export default function ProductDetailPageClient({
                   {Object.entries(product.specs).map(([key, val]: [string, string]) => (
                     <div
                       key={key}
-                      className="flex justify-between items-center text-xs py-1 border-b border-white/5"
+                      className="flex justify-between items-start gap-4 text-xs py-2 border-b border-white/5"
                     >
-                      <span className="text-neutral-400">{key}</span>
-                      <span className="text-white font-medium text-right">{val}</span>
+                      <span className="text-neutral-400 shrink-0">{key}</span>
+                      <span className="text-white font-medium text-right break-words">{val}</span>
                     </div>
                   ))}
                 </div>
