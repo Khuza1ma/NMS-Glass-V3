@@ -27,10 +27,16 @@ const themeInitScript = `
     try {
       var saved = localStorage.getItem('nms-theme');
       var supportDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      if (saved === 'dark' || (!saved && supportDark) || (saved === 'system' && supportDark)) {
-        document.documentElement.classList.add('dark');
+      var effective = (saved === 'dark' || (!saved && supportDark) || (saved === 'system' && supportDark)) ? 'dark' : 'light';
+      var root = document.documentElement;
+      if (effective === 'dark') {
+        root.classList.add('dark');
+        root.setAttribute('data-theme', 'dark');
+        root.style.colorScheme = 'dark';
       } else {
-        document.documentElement.classList.remove('dark');
+        root.classList.remove('dark');
+        root.setAttribute('data-theme', 'light');
+        root.style.colorScheme = 'light';
       }
     } catch (e) {}
   })();

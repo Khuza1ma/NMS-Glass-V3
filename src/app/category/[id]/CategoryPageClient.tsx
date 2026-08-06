@@ -26,15 +26,15 @@ export default function CategoryPageClient({ category, error }: CategoryPageClie
         {error && <Alert message={error} />}
 
         {/* Category Header */}
-        <div className="relative rounded-3xl overflow-hidden border border-slate-200 dark:border-white/5 bg-white/60 dark:bg-neutral-900/30 p-6 sm:p-12 md:p-16 flex flex-col justify-end min-h-[260px] sm:min-h-[300px] shadow-xl">
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-900/50 to-transparent dark:from-neutral-950 dark:via-neutral-900/60 z-10" />
+        <div className="relative rounded-3xl overflow-hidden border border-slate-200 dark:border-white/5 bg-slate-900 p-6 sm:p-12 md:p-16 flex flex-col justify-end min-h-[260px] sm:min-h-[300px] shadow-xl">
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/60 to-slate-950/20 z-10" />
           <SafeImage
             src={category.image}
             alt={category.name}
-            className="absolute inset-0 w-full h-full object-cover opacity-50 dark:opacity-35 -z-10"
+            className="absolute inset-0 w-full h-full object-cover opacity-65 -z-10"
             priority={true}
           />
-          <div className="relative z-20 space-y-4 max-w-2xl">
+          <div className="relative z-20 space-y-4 max-w-2xl text-white">
             <Link
               href="/"
               className="inline-flex items-center gap-2 text-sky-400 hover:text-sky-300 text-xs font-semibold uppercase tracking-wider sm:tracking-widest mb-2 transition-colors"
@@ -42,8 +42,8 @@ export default function CategoryPageClient({ category, error }: CategoryPageClie
               <FiArrowLeft />
               <span>Back to Services</span>
             </Link>
-            <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-white">{category.name}</h1>
-            <p className="text-neutral-200 dark:text-neutral-300 text-sm sm:text-base leading-relaxed">
+            <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight">{category.name}</h1>
+            <p className="text-neutral-200 text-sm sm:text-base leading-relaxed">
               {category.description}
             </p>
           </div>
@@ -62,7 +62,9 @@ export default function CategoryPageClient({ category, error }: CategoryPageClie
                 className="space-y-8"
               >
                 <div className="border-b border-slate-200 dark:border-white/5 pb-4">
-                  <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white">{sub.name}</h2>
+                  <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white">
+                    {sub.name}
+                  </h2>
                   <p className="text-sm text-slate-600 dark:text-neutral-400 mt-1">{sub.description}</p>
                 </div>
 

@@ -95,7 +95,7 @@ export default function ClientHome({ initialCategories, settings }: ClientHomePr
     <div className="flex flex-col bg-slate-50 dark:bg-neutral-950 text-slate-900 dark:text-white min-h-screen transition-colors duration-300">
       {/* Hero Section */}
       <section className="relative min-h-[85vh] flex items-center justify-center overflow-hidden py-24 px-4">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-sky-100/60 via-slate-50 to-slate-50 dark:from-sky-950/20 dark:via-neutral-950 dark:to-neutral-950 z-0"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-sky-100/80 via-slate-50 to-slate-50 dark:from-sky-950/20 dark:via-neutral-950 dark:to-neutral-950 z-0"></div>
         <div className="absolute top-1/4 left-1/3 w-96 h-96 bg-sky-500/10 rounded-full blur-3xl -z-10 animate-pulse"></div>
         <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl -z-10 animate-pulse delay-700"></div>
 
@@ -105,7 +105,7 @@ export default function ClientHome({ initialCategories, settings }: ClientHomePr
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <span className="inline-block max-w-full px-3.5 py-1 text-[11px] sm:text-xs font-semibold uppercase tracking-wider sm:tracking-widest text-sky-600 dark:text-sky-400 bg-sky-500/10 border border-sky-500/20 rounded-xl sm:rounded-full text-balance leading-snug">
+            <span className="inline-block max-w-full px-3.5 py-1 text-[11px] sm:text-xs font-semibold uppercase tracking-wider sm:tracking-widest text-sky-700 dark:text-sky-400 bg-sky-500/10 border border-sky-500/20 rounded-xl sm:rounded-full text-balance leading-snug">
               {settings.logo_text} Architectural & Composite Fabricators
             </span>
           </motion.div>
@@ -155,9 +155,9 @@ export default function ClientHome({ initialCategories, settings }: ClientHomePr
       {/* Categories Grid Section */}
       <section
         id="categories"
-        className="py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full border-t border-slate-200 dark:border-white/5"
+        className="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full border-t border-slate-200 dark:border-white/5"
       >
-        <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
+        <div className="text-center max-w-3xl mx-auto mb-12 space-y-3">
           <h2 className="text-3xl md:text-5xl font-bold tracking-tight text-slate-900 dark:text-white">
             Browse Services
           </h2>
@@ -167,57 +167,60 @@ export default function ClientHome({ initialCategories, settings }: ClientHomePr
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {initialCategories.map((category, index) => (
             <motion.div
               key={category.id}
-              initial={{ opacity: 0, y: 40 }}
+              initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="group relative rounded-2xl overflow-hidden border border-slate-200 dark:border-white/5 bg-white/60 dark:bg-neutral-900/40 backdrop-blur-sm shadow-xl flex flex-col min-h-[380px] h-full"
+              transition={{ duration: 0.4, delay: index * 0.1 }}
+              className="group relative rounded-xl overflow-hidden border border-slate-200 dark:border-white/5 bg-white dark:bg-neutral-900 shadow-md hover:shadow-xl hover:border-sky-500/30 flex flex-col transition-all duration-300"
             >
-              {/* Image Background Cover */}
-              <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-900/50 to-transparent dark:from-neutral-950 dark:via-neutral-900/60 z-10 transition-colors group-hover:from-slate-950 dark:group-hover:from-neutral-950/95" />
-              <SafeImage
-                src={category.image}
-                alt={category.name}
-                className="absolute inset-0 w-full h-full object-cover opacity-50 dark:opacity-45 group-hover:scale-105 transition-transform duration-700 -z-10"
-              />
-
-              <div className="relative z-20 p-8 mt-auto flex flex-col h-full justify-between">
-                <span className="inline-block self-start text-[11px] sm:text-xs font-semibold tracking-wider sm:tracking-widest text-sky-400 uppercase bg-sky-500/20 px-3 py-1 rounded-full border border-sky-400/30 backdrop-blur-md">
+              {/* Compact Image Banner */}
+              <div className="relative h-44 sm:h-48 w-full overflow-hidden bg-slate-100 dark:bg-neutral-950">
+                <SafeImage
+                  src={category.image}
+                  alt={category.name}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity" />
+                <span className="absolute top-3 left-3 inline-block text-[10px] sm:text-[11px] font-semibold tracking-wider uppercase text-white bg-slate-950/70 backdrop-blur-md px-2.5 py-0.5 rounded-full border border-white/20 shadow-xs">
                   {settings.logo_text} Service
                 </span>
+              </div>
 
-                <div className="space-y-3">
-                  <h3 className="text-2xl font-bold text-white group-hover:text-sky-400 transition-colors flex items-center gap-2">
+              {/* Compact Body Container */}
+              <div className="p-5 sm:p-6 flex flex-col justify-between flex-1 space-y-4">
+                <div className="space-y-2">
+                  <h3 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white group-hover:text-sky-600 dark:group-hover:text-sky-400 transition-colors flex items-center gap-2">
                     <span>{category.name}</span>
-                    <FiArrowRight className="opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
+                    <FiArrowRight className="opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all text-sky-600 dark:text-sky-400 text-lg" />
                   </h3>
-                  <p className="text-sm text-neutral-200 dark:text-neutral-300 leading-relaxed max-w-md">
+                  <p className="text-xs sm:text-sm text-slate-600 dark:text-neutral-400 leading-relaxed line-clamp-2">
                     {category.description}
                   </p>
-                  <div className="pt-4 flex flex-wrap gap-2">
+                  <div className="pt-1.5 flex flex-wrap gap-1.5">
                     {category.subcategories &&
                       category.subcategories.map((sub: SubCategory) => (
                         <span
                           key={sub.id}
-                          className="text-xs text-neutral-200 dark:text-neutral-400 bg-black/40 dark:bg-neutral-900 border border-white/10 dark:border-white/5 px-2.5 py-1 rounded-md backdrop-blur-xs"
+                          className="text-[11px] text-slate-700 dark:text-neutral-300 bg-slate-100 dark:bg-neutral-800 border border-slate-200/80 dark:border-white/5 px-2.5 py-0.5 rounded-md font-medium"
                         >
                           {sub.name}
                         </span>
                       ))}
                   </div>
-                  <div className="pt-4">
-                    <Link
-                      href={`/category/${category.id}`}
-                      className="inline-flex items-center gap-2 text-sky-400 hover:text-sky-300 text-sm font-semibold transition-colors"
-                    >
-                      <span>View Service Catalogue</span>
-                      <FiArrowRight />
-                    </Link>
-                  </div>
+                </div>
+
+                <div className="pt-2 border-t border-slate-100 dark:border-white/5">
+                  <Link
+                    href={`/category/${category.id}`}
+                    className="inline-flex items-center gap-1.5 text-sky-600 dark:text-sky-400 hover:text-sky-700 dark:hover:text-sky-300 text-xs sm:text-sm font-semibold transition-colors"
+                  >
+                    <span>View Service Catalogue</span>
+                    <FiArrowRight />
+                  </Link>
                 </div>
               </div>
             </motion.div>
@@ -353,7 +356,7 @@ export default function ClientHome({ initialCategories, settings }: ClientHomePr
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full bg-gradient-to-r from-sky-500 to-indigo-600 hover:from-sky-600 hover:to-indigo-700 text-white font-medium py-3 rounded-xl transition-all shadow-md shadow-sky-500/10 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full bg-gradient-to-r from-sky-500 to-indigo-600 hover:from-sky-600 hover:to-indigo-700 text-white font-medium py-3 rounded-xl transition-all shadow-md shadow-sky-500/10 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
                 >
                   {isSubmitting ? (
                     <>
