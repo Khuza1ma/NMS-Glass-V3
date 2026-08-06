@@ -15,7 +15,7 @@ export default function Footer({ settings = FALLBACK_SETTINGS }: FooterProps) {
   const cleanPhone = settings.phone.replace(/\s+/g, "");
 
   return (
-    <footer className="bg-neutral-950 border-t border-white/5 text-neutral-400 pt-16 pb-8">
+    <footer className="bg-slate-100 dark:bg-neutral-950 border-t border-slate-200 dark:border-white/5 text-slate-600 dark:text-neutral-400 pt-16 pb-8 transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
           {/* Brand Panel */}
@@ -25,20 +25,20 @@ export default function Footer({ settings = FALLBACK_SETTINGS }: FooterProps) {
                 {settings.logo_text.charAt(0)}
               </span>
               <div className="flex flex-col">
-                <span className="text-white font-extrabold text-xl tracking-wider leading-none">
+                <span className="text-slate-900 dark:text-white font-extrabold text-xl tracking-wider leading-none">
                   {settings.logo_text}
                 </span>
-                <span className="text-neutral-400 text-[10px] sm:text-xs tracking-wider sm:tracking-widest mt-0.5">
+                <span className="text-slate-500 dark:text-neutral-400 text-[10px] sm:text-xs tracking-wider sm:tracking-widest mt-0.5">
                   {settings.logo_subtext}
                 </span>
               </div>
             </Link>
-            <p className="text-neutral-400 text-sm leading-relaxed max-w-sm">
+            <p className="text-slate-600 dark:text-neutral-400 text-sm leading-relaxed max-w-sm">
               {settings.site_subtitle}
             </p>
             {/* Social media connections */}
             <div className="pt-2">
-              <h4 className="text-white font-bold text-xs tracking-wider uppercase mb-3">
+              <h4 className="text-slate-900 dark:text-white font-bold text-xs tracking-wider uppercase mb-3">
                 Connect with Us
               </h4>
               <div className="flex flex-wrap items-center gap-3">
@@ -47,7 +47,7 @@ export default function Footer({ settings = FALLBACK_SETTINGS }: FooterProps) {
                     href={settings.justdial_url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="bg-neutral-900 border border-white/5 p-2.5 rounded-lg text-neutral-400 hover:text-sky-400 hover:border-sky-400/20 transition-all text-xs font-semibold flex items-center gap-1.5"
+                    className="bg-white dark:bg-neutral-900 border border-slate-200 dark:border-white/5 p-2.5 rounded-lg text-slate-600 dark:text-neutral-400 hover:text-sky-600 dark:hover:text-sky-400 hover:border-sky-500/30 transition-all text-xs font-semibold flex items-center gap-1.5 shadow-xs"
                     title="Just Dial"
                   >
                     <FaPhoneAlt className="text-xs" />
@@ -59,7 +59,7 @@ export default function Footer({ settings = FALLBACK_SETTINGS }: FooterProps) {
                     href={settings.linkedin_url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="bg-neutral-900 border border-white/5 p-2.5 rounded-lg text-neutral-400 hover:text-sky-400 hover:border-sky-400/20 transition-all"
+                    className="bg-white dark:bg-neutral-900 border border-slate-200 dark:border-white/5 p-2.5 rounded-lg text-slate-600 dark:text-neutral-400 hover:text-sky-600 dark:hover:text-sky-400 hover:border-sky-500/30 transition-all shadow-xs"
                     title="LinkedIn"
                   >
                     <FaLinkedin className="text-lg" />
@@ -70,7 +70,7 @@ export default function Footer({ settings = FALLBACK_SETTINGS }: FooterProps) {
                     href={settings.instagram_url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="bg-neutral-900 border border-white/5 p-2.5 rounded-lg text-neutral-400 hover:text-pink-500 hover:border-pink-500/20 transition-all"
+                    className="bg-white dark:bg-neutral-900 border border-slate-200 dark:border-white/5 p-2.5 rounded-lg text-slate-600 dark:text-neutral-400 hover:text-pink-600 dark:hover:text-pink-500 hover:border-pink-500/30 transition-all shadow-xs"
                     title="Instagram"
                   >
                     <FaInstagram className="text-lg" />
@@ -82,22 +82,22 @@ export default function Footer({ settings = FALLBACK_SETTINGS }: FooterProps) {
 
           {/* Quick links */}
           <div>
-            <h4 className="text-white font-bold text-sm tracking-wider uppercase mb-4">
+            <h4 className="text-slate-900 dark:text-white font-bold text-sm tracking-wider uppercase mb-4">
               Quick Links
             </h4>
             <ul className="space-y-2 text-sm">
               <li>
-                <Link href="/" className="hover:text-white transition-colors">
+                <Link href="/" className="hover:text-slate-900 dark:hover:text-white transition-colors">
                   Home
                 </Link>
               </li>
               <li>
-                <Link href="/#categories" className="hover:text-white transition-colors">
+                <Link href="/#categories" className="hover:text-slate-900 dark:hover:text-white transition-colors">
                   Products
                 </Link>
               </li>
               <li>
-                <Link href="/#contact" className="hover:text-white transition-colors">
+                <Link href="/#contact" className="hover:text-slate-900 dark:hover:text-white transition-colors">
                   Inquiry Form
                 </Link>
               </li>
@@ -106,35 +106,35 @@ export default function Footer({ settings = FALLBACK_SETTINGS }: FooterProps) {
 
           {/* Contact Details */}
           <div>
-            <h4 className="text-white font-bold text-sm tracking-wider uppercase mb-4">
+            <h4 className="text-slate-900 dark:text-white font-bold text-sm tracking-wider uppercase mb-4">
               Contact Info
             </h4>
             <ul className="space-y-3 text-sm">
               <li className="flex items-start gap-2.5">
-                <FiMapPin className="text-sky-400 mt-1 flex-shrink-0" />
+                <FiMapPin className="text-sky-500 dark:text-sky-400 mt-1 flex-shrink-0" />
                 <a
                   href={settings.google_maps_url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="hover:text-white transition-colors"
+                  className="hover:text-slate-900 dark:hover:text-white transition-colors"
                 >
                   {settings.address}
                 </a>
               </li>
               <li className="flex items-center gap-2.5">
-                <FiPhone className="text-sky-400 flex-shrink-0" />
-                <a href={`tel:${cleanPhone}`} className="hover:text-white transition-colors">
+                <FiPhone className="text-sky-500 dark:text-sky-400 flex-shrink-0" />
+                <a href={`tel:${cleanPhone}`} className="hover:text-slate-900 dark:hover:text-white transition-colors">
                   {settings.phone}
                 </a>
               </li>
               <li className="flex items-center gap-2.5">
-                <FiMail className="text-sky-400 flex-shrink-0" />
-                <a href={`mailto:${settings.email}`} className="hover:text-white transition-colors">
+                <FiMail className="text-sky-500 dark:text-sky-400 flex-shrink-0" />
+                <a href={`mailto:${settings.email}`} className="hover:text-slate-900 dark:hover:text-white transition-colors">
                   {settings.email}
                 </a>
               </li>
               <li className="flex items-center gap-2.5">
-                <FiClock className="text-sky-400 flex-shrink-0" />
+                <FiClock className="text-sky-500 dark:text-sky-400 flex-shrink-0" />
                 <span>Mon - Sat: 9:00 AM - 7:00 PM</span>
               </li>
             </ul>
@@ -142,7 +142,7 @@ export default function Footer({ settings = FALLBACK_SETTINGS }: FooterProps) {
         </div>
 
         {/* Bottom banner */}
-        <div className="pt-8 border-t border-white/5 text-center text-xs text-neutral-500">
+        <div className="pt-8 border-t border-slate-200 dark:border-white/5 text-center text-xs text-slate-500 dark:text-neutral-500">
           <p>
             Copyright © {new Date().getFullYear()} | {settings.logo_text} Glass & Aluminium. All
             rights reserved.

@@ -4,6 +4,7 @@ import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { getSiteSettings } from "@/lib/supabase";
+import { ThemeProvider } from "@/components/ThemeProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -21,6 +22,20 @@ export const metadata: Metadata = {
     "Discover premium, customized architectural aluminum doors, windows, durable glass-fiber partitions, composite kitchens, and luxury retractable pleated mosquito screens at NMS.",
 };
 
+const themeInitScript = `
+  (function() {
+    try {
+      var saved = localStorage.getItem('nms-theme');
+      var supportDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (saved === 'dark' || (!saved && supportDark) || (saved === 'system' && supportDark)) {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+    } catch (e) {}
+  })();
+`;
+
 export default async function RootLayout({
   children,
 }: Readonly<{
@@ -29,11 +44,20 @@ export default async function RootLayout({
   const settings = await getSiteSettings();
 
   return (
-    <html lang="en" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col bg-neutral-950 text-white font-sans">
-        <Navbar settings={settings} />
-        <main className="flex-grow pt-20">{children}</main>
-        <Footer settings={settings} />
+    <html
+      lang="en"
+      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      suppressHydrationWarning
+    >
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
+      </head>
+      <body className="min-h-full flex flex-col bg-slate-50 dark:bg-neutral-950 text-slate-900 dark:text-white font-sans transition-colors duration-300">
+        <ThemeProvider>
+          <Navbar settings={settings} />
+          <main className="flex-grow pt-20">{children}</main>
+          <Footer settings={settings} />
+        </ThemeProvider>
       </body>
     </html>
   );

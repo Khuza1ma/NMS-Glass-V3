@@ -24,7 +24,7 @@ export default function ProductDetailPageClient({
   error,
 }: ProductDetailPageClientProps) {
   const { product, subcategory, category } = productData;
-  
+
   // Aggregate all gallery images safely
   const allImages = product.images ? [...product.images] : [];
   if (product.variants) {
@@ -43,7 +43,7 @@ export default function ProductDetailPageClient({
   const activeImage = allImages[activeImageIndex] || "";
 
   return (
-    <div className="min-h-screen bg-neutral-950 text-white py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-slate-50 dark:bg-neutral-950 text-slate-900 dark:text-white py-12 px-4 sm:px-6 lg:px-8 transition-colors duration-300">
       <div className="max-w-7xl mx-auto space-y-12">
         {/* Breadcrumbs */}
         <Breadcrumbs
@@ -60,7 +60,7 @@ export default function ProductDetailPageClient({
         {/* Back Link */}
         <Link
           href={`/category/${category.id}`}
-          className="inline-flex items-center gap-2 text-sky-400 hover:text-sky-300 text-xs font-semibold uppercase tracking-widest transition-colors"
+          className="inline-flex items-center gap-2 text-sky-600 dark:text-sky-400 hover:text-sky-500 dark:hover:text-sky-300 text-xs font-semibold uppercase tracking-widest transition-colors"
         >
           <FiArrowLeft />
           <span>Back to {category.name}</span>
@@ -70,7 +70,7 @@ export default function ProductDetailPageClient({
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
           {/* Gallery Module */}
           <div className="lg:col-span-7 space-y-4">
-            <div className="aspect-[4/3] w-full rounded-2xl overflow-hidden border border-white/5 bg-neutral-900 relative group flex items-center justify-center">
+            <div className="aspect-[4/3] w-full rounded-2xl overflow-hidden border border-slate-200 dark:border-white/5 bg-slate-100 dark:bg-neutral-900 relative group flex items-center justify-center shadow-md">
               <SafeImage
                 src={activeImage}
                 alt={product.name}
@@ -91,13 +91,14 @@ export default function ProductDetailPageClient({
                   >
                     <FiChevronRight className="text-xl" />
                   </button>
-                  <div className="absolute bottom-4 right-4 bg-black/70 border border-white/10 px-3 py-1 rounded-full text-xs font-semibold text-neutral-300 tracking-wider">
+                  <div className="absolute bottom-4 right-4 bg-black/70 border border-white/10 px-3 py-1 rounded-full text-xs font-semibold text-neutral-200 tracking-wider">
                     {activeImageIndex + 1} / {allImages.length}
                   </div>
                 </>
               )}
             </div>
 
+            {/* Thumbnail selector */}
             {allImages.length > 1 && (
               <div className="grid grid-cols-4 sm:grid-cols-6 gap-3">
                 {allImages.map((img, i) => (
@@ -107,7 +108,7 @@ export default function ProductDetailPageClient({
                     className={`aspect-square rounded-lg overflow-hidden border relative transition-all ${
                       activeImageIndex === i
                         ? "border-sky-500 scale-95"
-                        : "border-white/5 hover:border-white/20"
+                        : "border-slate-200 dark:border-white/5 hover:border-slate-300 dark:hover:border-white/20"
                     }`}
                   >
                     <SafeImage src={img} alt="" className="w-full h-full object-cover" />
@@ -118,15 +119,15 @@ export default function ProductDetailPageClient({
           </div>
 
           {/* Product Specifications & Details Card */}
-          <div className="lg:col-span-5 space-y-8 bg-neutral-900/30 border border-white/5 p-5 sm:p-8 rounded-3xl backdrop-blur-sm self-start">
+          <div className="lg:col-span-5 space-y-8 bg-white dark:bg-neutral-900/30 border border-slate-200 dark:border-white/5 p-5 sm:p-8 rounded-3xl backdrop-blur-sm self-start shadow-xl transition-colors duration-300">
             <div>
-              <span className="inline-block max-w-full text-[11px] sm:text-xs font-semibold uppercase tracking-wider sm:tracking-widest text-sky-400">
+              <span className="inline-block max-w-full text-[11px] sm:text-xs font-semibold uppercase tracking-wider sm:tracking-widest text-sky-600 dark:text-sky-400">
                 {subcategory.name}
               </span>
-              <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight mt-1">
+              <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight mt-1 text-slate-900 dark:text-white">
                 {product.name}
               </h1>
-              <p className="text-neutral-300 text-sm mt-4 leading-relaxed font-light">
+              <p className="text-slate-600 dark:text-neutral-300 text-sm mt-4 leading-relaxed font-light">
                 {product.description}
               </p>
             </div>
@@ -134,13 +135,13 @@ export default function ProductDetailPageClient({
             {/* Core Features */}
             {product.features && product.features.length > 0 && (
               <div className="space-y-3">
-                <h3 className="text-sm font-semibold tracking-wider text-neutral-400 uppercase">
+                <h3 className="text-sm font-semibold tracking-wider text-slate-500 dark:text-neutral-400 uppercase">
                   Key Features
                 </h3>
                 <ul className="space-y-2">
                   {product.features.map((feature: string, i: number) => (
-                    <li key={i} className="flex items-start gap-2.5 text-xs text-neutral-300">
-                      <FiCheckCircle className="text-sky-400 mt-0.5 flex-shrink-0" />
+                    <li key={i} className="flex items-start gap-2.5 text-xs text-slate-700 dark:text-neutral-300">
+                      <FiCheckCircle className="text-sky-500 dark:text-sky-400 mt-0.5 flex-shrink-0" />
                       <span>{feature}</span>
                     </li>
                   ))}
@@ -150,18 +151,18 @@ export default function ProductDetailPageClient({
 
             {/* Technical Specifications */}
             {product.specs && typeof product.specs === "object" && Object.keys(product.specs).length > 0 && (
-              <div className="space-y-3 border-t border-white/5 pt-6">
-                <h3 className="text-sm font-semibold tracking-wider text-neutral-400 uppercase">
+              <div className="space-y-3 border-t border-slate-200 dark:border-white/5 pt-6">
+                <h3 className="text-sm font-semibold tracking-wider text-slate-500 dark:text-neutral-400 uppercase">
                   Technical Specifications
                 </h3>
                 <div className="grid grid-cols-1 gap-2">
                   {Object.entries(product.specs).map(([key, val]: [string, string]) => (
                     <div
                       key={key}
-                      className="flex justify-between items-start gap-4 text-xs py-2 border-b border-white/5"
+                      className="flex justify-between items-start gap-4 text-xs py-2 border-b border-slate-100 dark:border-white/5"
                     >
-                      <span className="text-neutral-400 shrink-0">{key}</span>
-                      <span className="text-white font-medium text-right break-words">{val}</span>
+                      <span className="text-slate-500 dark:text-neutral-400 shrink-0">{key}</span>
+                      <span className="text-slate-900 dark:text-white font-medium text-right break-words">{val}</span>
                     </div>
                   ))}
                 </div>
@@ -169,7 +170,7 @@ export default function ProductDetailPageClient({
             )}
 
             {/* Actions / CTA Buttons */}
-            <div className="space-y-3 border-t border-white/5 pt-6">
+            <div className="space-y-3 border-t border-slate-200 dark:border-white/5 pt-6">
               <a
                 href={`https://wa.me/918347786753?text=Hi%20NMS,%20I%27d%20like%20to%20inquire%20about%20the%20${encodeURIComponent(
                   product.name
@@ -183,9 +184,9 @@ export default function ProductDetailPageClient({
               </a>
               <a
                 href="tel:+918347786753"
-                className="w-full flex items-center justify-center gap-2.5 bg-neutral-800 hover:bg-neutral-700 text-white font-semibold py-3 px-4 rounded-xl border border-white/5 transition-colors text-sm"
+                className="w-full flex items-center justify-center gap-2.5 bg-slate-100 hover:bg-slate-200 text-slate-800 dark:bg-neutral-800 dark:hover:bg-neutral-700 dark:text-white font-semibold py-3 px-4 rounded-xl border border-slate-200 dark:border-white/5 transition-colors text-sm"
               >
-                <FiPhone className="text-sky-400" />
+                <FiPhone className="text-sky-500 dark:text-sky-400" />
                 <span>Call Sales Desk</span>
               </a>
             </div>
@@ -194,15 +195,15 @@ export default function ProductDetailPageClient({
 
         {/* Variants List Section */}
         {product.variants && product.variants.length > 0 && (
-          <div className="space-y-6 pt-12 border-t border-white/5">
-            <h2 className="text-2xl font-bold">Available Variants</h2>
+          <div className="space-y-6 pt-12 border-t border-slate-200 dark:border-white/5">
+            <h2 className="text-2xl font-bold text-slate-900 dark:text-white">Available Variants</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {product.variants.map((v: ProductVariant, i: number) => (
                 <div
                   key={i}
-                  className="flex flex-col sm:flex-row gap-6 border border-white/5 bg-neutral-900/40 rounded-2xl p-6 hover:bg-neutral-900 transition-colors"
+                  className="flex flex-col sm:flex-row gap-6 border border-slate-200 dark:border-white/5 bg-white dark:bg-neutral-900/40 rounded-2xl p-6 hover:bg-slate-50 dark:hover:bg-neutral-900 transition-colors shadow-md"
                 >
-                  <div className="w-full sm:w-1/3 aspect-[4/3] rounded-xl overflow-hidden bg-neutral-950 relative">
+                  <div className="w-full sm:w-1/3 aspect-[4/3] rounded-xl overflow-hidden bg-slate-100 dark:bg-neutral-950 relative">
                     <SafeImage
                       src={v.images[0]}
                       alt={v.name}
@@ -211,9 +212,9 @@ export default function ProductDetailPageClient({
                   </div>
                   <div className="w-full sm:w-2/3 flex flex-col justify-between">
                     <div className="space-y-2">
-                      <h4 className="text-lg font-bold text-white">{v.name}</h4>
+                      <h4 className="text-lg font-bold text-slate-900 dark:text-white">{v.name}</h4>
                       {v.description && (
-                        <p className="text-xs text-neutral-400 leading-relaxed">{v.description}</p>
+                        <p className="text-xs text-slate-600 dark:text-neutral-400 leading-relaxed">{v.description}</p>
                       )}
                     </div>
 
@@ -222,7 +223,7 @@ export default function ProductDetailPageClient({
                         const idx = allImages.indexOf(v.images[0]);
                         if (idx !== -1) setActiveImageIndex(idx);
                       }}
-                      className="mt-4 text-xs font-semibold text-sky-400 hover:text-sky-300 text-left self-start"
+                      className="mt-4 text-xs font-semibold text-sky-600 dark:text-sky-400 hover:text-sky-500 dark:hover:text-sky-300 text-left self-start"
                     >
                       View in gallery →
                     </button>

@@ -17,7 +17,7 @@ interface CategoryPageClientProps {
 
 export default function CategoryPageClient({ category, error }: CategoryPageClientProps) {
   return (
-    <div className="min-h-screen bg-neutral-950 text-white py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-slate-50 dark:bg-neutral-950 text-slate-900 dark:text-white py-12 px-4 sm:px-6 lg:px-8 transition-colors duration-300">
       <div className="max-w-7xl mx-auto space-y-12">
         {/* Breadcrumbs */}
         <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: category.name }]} />
@@ -26,12 +26,12 @@ export default function CategoryPageClient({ category, error }: CategoryPageClie
         {error && <Alert message={error} />}
 
         {/* Category Header */}
-        <div className="relative rounded-3xl overflow-hidden border border-white/5 bg-neutral-900/30 p-6 sm:p-12 md:p-16 flex flex-col justify-end min-h-[260px] sm:min-h-[300px]">
-          <div className="absolute inset-0 bg-gradient-to-t from-neutral-950 via-neutral-900/60 to-transparent z-10" />
+        <div className="relative rounded-3xl overflow-hidden border border-slate-200 dark:border-white/5 bg-white/60 dark:bg-neutral-900/30 p-6 sm:p-12 md:p-16 flex flex-col justify-end min-h-[260px] sm:min-h-[300px] shadow-xl">
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-900/50 to-transparent dark:from-neutral-950 dark:via-neutral-900/60 z-10" />
           <SafeImage
             src={category.image}
             alt={category.name}
-            className="absolute inset-0 w-full h-full object-cover opacity-35 -z-10"
+            className="absolute inset-0 w-full h-full object-cover opacity-50 dark:opacity-35 -z-10"
             priority={true}
           />
           <div className="relative z-20 space-y-4 max-w-2xl">
@@ -42,8 +42,8 @@ export default function CategoryPageClient({ category, error }: CategoryPageClie
               <FiArrowLeft />
               <span>Back to Services</span>
             </Link>
-            <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight">{category.name}</h1>
-            <p className="text-neutral-300 text-sm sm:text-base leading-relaxed">
+            <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-white">{category.name}</h1>
+            <p className="text-neutral-200 dark:text-neutral-300 text-sm sm:text-base leading-relaxed">
               {category.description}
             </p>
           </div>
@@ -61,9 +61,9 @@ export default function CategoryPageClient({ category, error }: CategoryPageClie
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 className="space-y-8"
               >
-                <div className="border-b border-white/5 pb-4">
-                  <h2 className="text-2xl sm:text-3xl font-bold">{sub.name}</h2>
-                  <p className="text-sm text-neutral-400 mt-1">{sub.description}</p>
+                <div className="border-b border-slate-200 dark:border-white/5 pb-4">
+                  <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white">{sub.name}</h2>
+                  <p className="text-sm text-slate-600 dark:text-neutral-400 mt-1">{sub.description}</p>
                 </div>
 
                 {/* Products inside this subcategory */}

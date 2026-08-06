@@ -46,10 +46,10 @@ export default function Toast({ toast, onClose, duration = 6000 }: ToastProps) {
           transition={{ duration: 0.3, ease: "easeOut" }}
           className={`pointer-events-auto rounded-2xl p-4 shadow-2xl border backdrop-blur-xl flex items-start gap-3.5 ${
             isSuccess
-              ? "bg-emerald-950/90 border-emerald-500/30 text-emerald-100 shadow-emerald-950/50"
+              ? "bg-emerald-900/90 dark:bg-emerald-950/90 border-emerald-500/30 text-emerald-100 shadow-emerald-950/30"
               : isError
-              ? "bg-rose-950/90 border-rose-500/30 text-rose-100 shadow-rose-950/50"
-              : "bg-neutral-900/90 border-sky-500/30 text-neutral-100 shadow-sky-950/50"
+              ? "bg-rose-900/90 dark:bg-rose-950/90 border-rose-500/30 text-rose-100 shadow-rose-950/30"
+              : "bg-slate-900/90 dark:bg-neutral-900/90 border-sky-500/30 text-slate-100 dark:text-neutral-100 shadow-slate-950/30"
           }`}
           role="alert"
         >
@@ -78,7 +78,7 @@ export default function Toast({ toast, onClose, duration = 6000 }: ToastProps) {
 
           <button
             onClick={onClose}
-            className="shrink-0 p-1 rounded-lg hover:bg-white/10 text-neutral-400 hover:text-white transition-colors"
+            className="shrink-0 p-1 rounded-lg hover:bg-white/10 text-neutral-300 hover:text-white transition-colors"
             aria-label="Close notification"
           >
             <FiX className="text-base" />

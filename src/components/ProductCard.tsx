@@ -11,8 +11,8 @@ interface ProductCardProps {
 
 export default function ProductCard({ product, categoryId }: ProductCardProps) {
   return (
-    <div className="group border border-white/5 rounded-2xl bg-neutral-900/50 hover:bg-neutral-900 overflow-hidden flex flex-col justify-between transition-all duration-300 hover:shadow-2xl hover:shadow-sky-500/5">
-      <div className="relative h-48 w-full overflow-hidden bg-neutral-950">
+    <div className="group border border-slate-200 dark:border-white/5 rounded-2xl bg-white dark:bg-neutral-900/50 hover:bg-slate-50 dark:hover:bg-neutral-900 overflow-hidden flex flex-col justify-between transition-all duration-300 hover:shadow-xl dark:hover:shadow-2xl hover:shadow-sky-500/10 dark:hover:shadow-sky-500/5">
+      <div className="relative h-48 w-full overflow-hidden bg-slate-100 dark:bg-neutral-950">
         <SafeImage
           src={product.images[0]}
           alt={product.name}
@@ -22,19 +22,19 @@ export default function ProductCard({ product, categoryId }: ProductCardProps) {
 
       <div className="p-6 space-y-4 flex flex-col flex-1 justify-between">
         <div className="space-y-2">
-          <h3 className="text-lg font-bold text-white group-hover:text-sky-400 transition-colors">
+          <h3 className="text-lg font-bold text-slate-900 dark:text-white group-hover:text-sky-600 dark:group-hover:text-sky-400 transition-colors">
             {product.name}
           </h3>
-          <p className="text-xs text-neutral-400 line-clamp-2 leading-relaxed">
+          <p className="text-xs text-slate-600 dark:text-neutral-400 line-clamp-2 leading-relaxed">
             {product.description}
           </p>
         </div>
 
         <div className="pt-4 flex items-center justify-between">
-          <span className="text-xs text-neutral-500">Premium Fit</span>
+          <span className="text-xs text-slate-500 dark:text-neutral-500">Premium Fit</span>
           <Link
             href={`/category/${categoryId}/${product.id}`}
-            className="inline-flex items-center gap-1.5 text-xs text-sky-400 font-semibold group-hover:underline"
+            className="inline-flex items-center gap-1.5 text-xs text-sky-600 dark:text-sky-400 font-semibold group-hover:underline"
           >
             <span>View Details</span>
             <FiChevronRight />

@@ -5,6 +5,7 @@ import Link from "next/link";
 import { FALLBACK_SETTINGS } from "@/lib/supabase";
 import { SiteSettings } from "@/lib/types";
 import { FiMenu, FiX, FiPhone, FiMessageCircle } from "react-icons/fi";
+import ThemeToggle from "@/components/ThemeToggle";
 
 interface NavbarProps {
   settings?: SiteSettings;
@@ -34,7 +35,7 @@ export default function Navbar({ settings = FALLBACK_SETTINGS }: NavbarProps) {
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         scrolled
-          ? "bg-neutral-900/80 backdrop-blur-md border-b border-white/10 shadow-lg"
+          ? "bg-white/80 dark:bg-neutral-900/80 backdrop-blur-md border-b border-slate-200 dark:border-white/10 shadow-lg shadow-slate-900/5 dark:shadow-black/20"
           : "bg-transparent"
       }`}
     >
@@ -47,10 +48,10 @@ export default function Navbar({ settings = FALLBACK_SETTINGS }: NavbarProps) {
                 {settings.logo_text.charAt(0)}
               </span>
               <div className="flex flex-col">
-                <span className="text-white font-extrabold text-xl tracking-wider leading-none">
+                <span className="text-slate-900 dark:text-white font-extrabold text-xl tracking-wider leading-none">
                   {settings.logo_text}
                 </span>
-                <span className="text-neutral-400 text-[10px] sm:text-xs tracking-wider sm:tracking-widest mt-0.5 truncate max-w-[170px] sm:max-w-none">
+                <span className="text-slate-500 dark:text-neutral-400 text-[10px] sm:text-xs tracking-wider sm:tracking-widest mt-0.5 truncate max-w-[170px] sm:max-w-none">
                   {settings.logo_subtext}
                 </span>
               </div>
@@ -58,30 +59,31 @@ export default function Navbar({ settings = FALLBACK_SETTINGS }: NavbarProps) {
           </div>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
+          <div className="hidden md:flex items-center space-x-6 lg:space-x-8">
             <Link
               href="/"
-              className="text-neutral-300 hover:text-white transition-colors text-sm font-medium"
+              className="text-slate-700 hover:text-slate-950 dark:text-neutral-300 dark:hover:text-white transition-colors text-sm font-medium"
             >
               Home
             </Link>
             <Link
               href="/#categories"
-              className="text-neutral-300 hover:text-white transition-colors text-sm font-medium"
+              className="text-slate-700 hover:text-slate-950 dark:text-neutral-300 dark:hover:text-white transition-colors text-sm font-medium"
             >
               Products
             </Link>
             <Link
               href="/#contact"
-              className="text-neutral-300 hover:text-white transition-colors text-sm font-medium"
+              className="text-slate-700 hover:text-slate-950 dark:text-neutral-300 dark:hover:text-white transition-colors text-sm font-medium"
             >
               Contact
             </Link>
+
             <a
               href={`tel:${cleanPhone}`}
-              className="flex items-center gap-2 bg-neutral-800 hover:bg-neutral-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors border border-white/5"
+              className="flex items-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-800 dark:bg-neutral-800 dark:hover:bg-neutral-700 dark:text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors border border-slate-200 dark:border-white/5"
             >
-              <FiPhone className="text-sky-400" />
+              <FiPhone className="text-sky-500 dark:text-sky-400" />
               <span>Call Us</span>
             </a>
             <a
@@ -93,13 +95,17 @@ export default function Navbar({ settings = FALLBACK_SETTINGS }: NavbarProps) {
               <FiMessageCircle className="text-lg" />
               <span>WhatsApp</span>
             </a>
+
+            {/* Theme Toggle Button */}
+            <ThemeToggle />
           </div>
 
-          {/* Mobile menu button */}
-          <div className="md:hidden">
+          {/* Mobile Actions (Theme toggle + menu trigger) */}
+          <div className="md:hidden flex items-center space-x-3">
+            <ThemeToggle />
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="inline-flex items-center justify-center p-2 rounded-md text-neutral-400 hover:text-white hover:bg-neutral-800 focus:outline-none transition-colors"
+              className="inline-flex items-center justify-center p-2 rounded-md text-slate-600 dark:text-neutral-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-neutral-800 focus:outline-none transition-colors"
             >
               {isOpen ? <FiX className="h-6 w-6" /> : <FiMenu className="h-6 w-6" />}
             </button>
@@ -109,34 +115,34 @@ export default function Navbar({ settings = FALLBACK_SETTINGS }: NavbarProps) {
 
       {/* Mobile Menu */}
       {isOpen && (
-        <div className="md:hidden bg-neutral-900 border-b border-white/10 px-4 pt-2 pb-6 space-y-4">
+        <div className="md:hidden bg-white/95 dark:bg-neutral-900 border-b border-slate-200 dark:border-white/10 px-4 pt-2 pb-6 space-y-4 backdrop-blur-md shadow-xl">
           <Link
             href="/"
             onClick={() => setIsOpen(false)}
-            className="block text-neutral-300 hover:text-white transition-colors text-base font-medium"
+            className="block text-slate-700 hover:text-slate-950 dark:text-neutral-300 dark:hover:text-white transition-colors text-base font-medium"
           >
             Home
           </Link>
           <Link
             href="/#categories"
             onClick={() => setIsOpen(false)}
-            className="block text-neutral-300 hover:text-white transition-colors text-base font-medium"
+            className="block text-slate-700 hover:text-slate-950 dark:text-neutral-300 dark:hover:text-white transition-colors text-base font-medium"
           >
             Products
           </Link>
           <Link
             href="/#contact"
             onClick={() => setIsOpen(false)}
-            className="block text-neutral-300 hover:text-white transition-colors text-base font-medium"
+            className="block text-slate-700 hover:text-slate-950 dark:text-neutral-300 dark:hover:text-white transition-colors text-base font-medium"
           >
             Contact
           </Link>
           <div className="pt-2 flex flex-col gap-3">
             <a
               href={`tel:${cleanPhone}`}
-              className="flex items-center justify-center gap-2 bg-neutral-800 hover:bg-neutral-700 text-white px-4 py-2.5 rounded-lg text-sm font-medium transition-colors border border-white/5"
+              className="flex items-center justify-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-800 dark:bg-neutral-800 dark:hover:bg-neutral-700 dark:text-white px-4 py-2.5 rounded-lg text-sm font-medium transition-colors border border-slate-200 dark:border-white/5"
             >
-              <FiPhone className="text-sky-400" />
+              <FiPhone className="text-sky-500 dark:text-sky-400" />
               <span>Call Us</span>
             </a>
             <a

@@ -10,7 +10,6 @@ import { submitInquiry, extractErrorMessage } from "@/lib/supabase";
 import { SiteSettings, Category, SubCategory } from "@/lib/types";
 import SafeImage from "@/components/SafeImage";
 import { FiArrowRight, FiSend, FiMessageCircle } from "react-icons/fi";
-import Alert from "@/components/Alert";
 import Toast, { ToastMessage } from "@/components/Toast";
 
 const inquirySchema = z.object({
@@ -73,7 +72,8 @@ export default function ClientHome({ initialCategories, settings }: ClientHomePr
       setToast({
         type: "success",
         title: "Inquiry Sent!",
-        message: "Thank you! Your inquiry has been sent successfully. Our team will contact you shortly.",
+        message:
+          "Thank you! Your inquiry has been sent successfully. Our team will contact you shortly.",
       });
       reset();
     } catch (err) {
@@ -92,10 +92,10 @@ export default function ClientHome({ initialCategories, settings }: ClientHomePr
   const cleanPhone = settings.phone.replace(/\s+/g, "").replace("+", "");
 
   return (
-    <div className="flex flex-col bg-neutral-950 text-white min-h-screen">
+    <div className="flex flex-col bg-slate-50 dark:bg-neutral-950 text-slate-900 dark:text-white min-h-screen transition-colors duration-300">
       {/* Hero Section */}
       <section className="relative min-h-[85vh] flex items-center justify-center overflow-hidden py-24 px-4">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-sky-950/20 via-neutral-950 to-neutral-950 z-0"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-sky-100/60 via-slate-50 to-slate-50 dark:from-sky-950/20 dark:via-neutral-950 dark:to-neutral-950 z-0"></div>
         <div className="absolute top-1/4 left-1/3 w-96 h-96 bg-sky-500/10 rounded-full blur-3xl -z-10 animate-pulse"></div>
         <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl -z-10 animate-pulse delay-700"></div>
 
@@ -105,13 +105,13 @@ export default function ClientHome({ initialCategories, settings }: ClientHomePr
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <span className="inline-block max-w-full px-3.5 py-1 text-[11px] sm:text-xs font-semibold uppercase tracking-wider sm:tracking-widest text-sky-400 bg-sky-400/10 border border-sky-400/20 rounded-xl sm:rounded-full text-balance leading-snug">
+            <span className="inline-block max-w-full px-3.5 py-1 text-[11px] sm:text-xs font-semibold uppercase tracking-wider sm:tracking-widest text-sky-600 dark:text-sky-400 bg-sky-500/10 border border-sky-500/20 rounded-xl sm:rounded-full text-balance leading-snug">
               {settings.logo_text} Architectural & Composite Fabricators
             </span>
           </motion.div>
 
           <motion.h1
-            className="text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-neutral-200 to-neutral-400 text-balance"
+            className="text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-slate-900 via-slate-800 to-slate-600 dark:from-white dark:via-neutral-200 dark:to-neutral-400 text-balance"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.1 }}
@@ -121,7 +121,7 @@ export default function ClientHome({ initialCategories, settings }: ClientHomePr
           </motion.h1>
 
           <motion.p
-            className="text-lg md:text-xl text-neutral-400 max-w-3xl mx-auto font-light leading-relaxed text-balance"
+            className="text-lg md:text-xl text-slate-600 dark:text-neutral-400 max-w-3xl mx-auto font-light leading-relaxed text-balance"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
@@ -144,7 +144,7 @@ export default function ClientHome({ initialCategories, settings }: ClientHomePr
             </Link>
             <Link
               href="#contact"
-              className="w-full sm:w-auto px-8 py-4 rounded-xl bg-neutral-900 border border-white/10 hover:bg-neutral-800 text-neutral-200 font-medium transition-all"
+              className="w-full sm:w-auto px-8 py-4 rounded-xl bg-white hover:bg-slate-100 text-slate-800 dark:bg-neutral-900 border border-slate-200 dark:border-white/10 dark:hover:bg-neutral-800 dark:text-neutral-200 font-medium transition-all shadow-xs"
             >
               Contact Sales
             </Link>
@@ -155,11 +155,13 @@ export default function ClientHome({ initialCategories, settings }: ClientHomePr
       {/* Categories Grid Section */}
       <section
         id="categories"
-        className="py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full border-t border-white/5"
+        className="py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full border-t border-slate-200 dark:border-white/5"
       >
         <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
-          <h2 className="text-3xl md:text-5xl font-bold tracking-tight">Browse Services</h2>
-          <p className="text-neutral-400">
+          <h2 className="text-3xl md:text-5xl font-bold tracking-tight text-slate-900 dark:text-white">
+            Browse Services
+          </h2>
+          <p className="text-slate-600 dark:text-neutral-400">
             We deliver state-of-the-art aluminum windows, custom fiber kitchens, and premium sliding
             mosquito protection screens.
           </p>
@@ -173,18 +175,18 @@ export default function ClientHome({ initialCategories, settings }: ClientHomePr
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="group relative rounded-2xl overflow-hidden border border-white/5 bg-neutral-900/40 backdrop-blur-sm shadow-xl flex flex-col min-h-[380px] h-full"
+              className="group relative rounded-2xl overflow-hidden border border-slate-200 dark:border-white/5 bg-white/60 dark:bg-neutral-900/40 backdrop-blur-sm shadow-xl flex flex-col min-h-[380px] h-full"
             >
               {/* Image Background Cover */}
-              <div className="absolute inset-0 bg-gradient-to-t from-neutral-950 via-neutral-900/60 to-transparent z-10 transition-colors group-hover:from-neutral-950/95" />
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-900/50 to-transparent dark:from-neutral-950 dark:via-neutral-900/60 z-10 transition-colors group-hover:from-slate-950 dark:group-hover:from-neutral-950/95" />
               <SafeImage
                 src={category.image}
                 alt={category.name}
-                className="absolute inset-0 w-full h-full object-cover opacity-45 group-hover:scale-105 transition-transform duration-700 -z-10"
+                className="absolute inset-0 w-full h-full object-cover opacity-50 dark:opacity-45 group-hover:scale-105 transition-transform duration-700 -z-10"
               />
 
               <div className="relative z-20 p-8 mt-auto flex flex-col h-full justify-between">
-                <span className="inline-block self-start text-[11px] sm:text-xs font-semibold tracking-wider sm:tracking-widest text-sky-400 uppercase bg-sky-500/10 px-3 py-1 rounded-full border border-sky-400/20">
+                <span className="inline-block self-start text-[11px] sm:text-xs font-semibold tracking-wider sm:tracking-widest text-sky-400 uppercase bg-sky-500/20 px-3 py-1 rounded-full border border-sky-400/30 backdrop-blur-md">
                   {settings.logo_text} Service
                 </span>
 
@@ -193,7 +195,7 @@ export default function ClientHome({ initialCategories, settings }: ClientHomePr
                     <span>{category.name}</span>
                     <FiArrowRight className="opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
                   </h3>
-                  <p className="text-sm text-neutral-300 leading-relaxed max-w-md">
+                  <p className="text-sm text-neutral-200 dark:text-neutral-300 leading-relaxed max-w-md">
                     {category.description}
                   </p>
                   <div className="pt-4 flex flex-wrap gap-2">
@@ -201,7 +203,7 @@ export default function ClientHome({ initialCategories, settings }: ClientHomePr
                       category.subcategories.map((sub: SubCategory) => (
                         <span
                           key={sub.id}
-                          className="text-xs text-neutral-400 bg-neutral-900 border border-white/5 px-2.5 py-1 rounded-md"
+                          className="text-xs text-neutral-200 dark:text-neutral-400 bg-black/40 dark:bg-neutral-900 border border-white/10 dark:border-white/5 px-2.5 py-1 rounded-md backdrop-blur-xs"
                         >
                           {sub.name}
                         </span>
@@ -224,18 +226,21 @@ export default function ClientHome({ initialCategories, settings }: ClientHomePr
       </section>
 
       {/* Inquiry and Contact section */}
-      <section id="contact" className="py-24 bg-neutral-900/30 border-t border-white/5 w-full">
+      <section
+        id="contact"
+        className="py-24 bg-slate-100/80 dark:bg-neutral-900/30 border-t border-slate-200 dark:border-white/5 w-full transition-colors duration-300"
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
             {/* Context Details */}
             <div className="space-y-8 flex flex-col justify-center">
-              <span className="inline-block max-w-full px-3 py-1 text-[11px] sm:text-xs font-semibold uppercase tracking-wider sm:tracking-widest text-indigo-400 bg-indigo-400/10 border border-indigo-400/20 rounded-full self-start">
+              <span className="inline-block max-w-full px-3 py-1 text-[11px] sm:text-xs font-semibold uppercase tracking-wider sm:tracking-widest text-indigo-600 dark:text-indigo-400 bg-indigo-500/10 border border-indigo-500/20 rounded-full self-start">
                 Quick Support & Inquiries
               </span>
-              <h2 className="text-3xl sm:text-5xl font-bold tracking-tight text-white">
+              <h2 className="text-3xl sm:text-5xl font-bold tracking-tight text-slate-900 dark:text-white">
                 Let&apos;s Build Your Project Together
               </h2>
-              <p className="text-neutral-400 leading-relaxed text-lg">
+              <p className="text-slate-600 dark:text-neutral-400 leading-relaxed text-lg">
                 Require customized measurements, structural blueprints, or pricing details? Fill out
                 our brief inquiry form or chat directly with our design engineering team on
                 WhatsApp.
@@ -255,21 +260,23 @@ export default function ClientHome({ initialCategories, settings }: ClientHomePr
             </div>
 
             {/* Quick Contact Form */}
-            <div className="bg-neutral-900 border border-white/5 rounded-2xl p-5 sm:p-8 shadow-2xl relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-sky-500/5 rounded-full blur-2xl"></div>
+            <div className="bg-white dark:bg-neutral-900 border border-slate-200 dark:border-white/5 rounded-2xl p-5 sm:p-8 shadow-xl dark:shadow-2xl relative overflow-hidden transition-colors duration-300">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-sky-500/10 dark:bg-sky-500/5 rounded-full blur-2xl"></div>
 
-              <h3 className="text-xl font-bold mb-6 text-white">Quick Inquiry Form</h3>
+              <h3 className="text-xl font-bold mb-6 text-slate-900 dark:text-white">
+                Quick Inquiry Form
+              </h3>
 
               <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                 <div>
-                  <label className="block text-xs font-medium text-neutral-400 uppercase tracking-wider mb-2">
+                  <label className="block text-xs font-medium text-slate-600 dark:text-neutral-400 uppercase tracking-wider mb-2">
                     Your Name
                   </label>
                   <input
                     type="text"
                     {...register("name")}
                     placeholder="Enter your full name"
-                    className="w-full bg-neutral-950 border border-white/10 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-sky-500 transition-colors"
+                    className="w-full bg-slate-50 dark:bg-neutral-950 border border-slate-300 dark:border-white/10 rounded-xl px-4 py-3 text-slate-900 dark:text-white text-sm focus:outline-none focus:border-sky-500 transition-colors placeholder:text-slate-400 dark:placeholder:text-neutral-600"
                   />
                   {errors.name && (
                     <p className="text-xs text-red-500 mt-1">{errors.name.message}</p>
@@ -278,14 +285,14 @@ export default function ClientHome({ initialCategories, settings }: ClientHomePr
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-xs font-medium text-neutral-400 uppercase tracking-wider mb-2">
+                    <label className="block text-xs font-medium text-slate-600 dark:text-neutral-400 uppercase tracking-wider mb-2">
                       Phone Number
                     </label>
                     <input
                       type="text"
                       {...register("phone")}
                       placeholder={`e.g. ${settings.phone}`}
-                      className="w-full bg-neutral-950 border border-white/10 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-sky-500 transition-colors"
+                      className="w-full bg-slate-50 dark:bg-neutral-950 border border-slate-300 dark:border-white/10 rounded-xl px-4 py-3 text-slate-900 dark:text-white text-sm focus:outline-none focus:border-sky-500 transition-colors placeholder:text-slate-400 dark:placeholder:text-neutral-600"
                     />
                     {errors.phone && (
                       <p className="text-xs text-red-500 mt-1">{errors.phone.message}</p>
@@ -293,14 +300,14 @@ export default function ClientHome({ initialCategories, settings }: ClientHomePr
                   </div>
 
                   <div>
-                    <label className="block text-xs font-medium text-neutral-400 uppercase tracking-wider mb-2">
+                    <label className="block text-xs font-medium text-slate-600 dark:text-neutral-400 uppercase tracking-wider mb-2">
                       Email Address (Optional)
                     </label>
                     <input
                       type="email"
                       {...register("email")}
                       placeholder="e.g. name@domain.com"
-                      className="w-full bg-neutral-950 border border-white/10 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-sky-500 transition-colors"
+                      className="w-full bg-slate-50 dark:bg-neutral-950 border border-slate-300 dark:border-white/10 rounded-xl px-4 py-3 text-slate-900 dark:text-white text-sm focus:outline-none focus:border-sky-500 transition-colors placeholder:text-slate-400 dark:placeholder:text-neutral-600"
                     />
                     {errors.email && (
                       <p className="text-xs text-red-500 mt-1">{errors.email.message}</p>
@@ -309,12 +316,12 @@ export default function ClientHome({ initialCategories, settings }: ClientHomePr
                 </div>
 
                 <div>
-                  <label className="block text-xs font-medium text-neutral-400 uppercase tracking-wider mb-2">
+                  <label className="block text-xs font-medium text-slate-600 dark:text-neutral-400 uppercase tracking-wider mb-2">
                     Service Category Interested In
                   </label>
                   <select
                     {...register("category")}
-                    className="w-full bg-neutral-950 border border-white/10 rounded-xl px-4 py-3 text-neutral-300 text-sm focus:outline-none focus:border-sky-500 transition-colors"
+                    className="w-full bg-slate-50 dark:bg-neutral-950 border border-slate-300 dark:border-white/10 rounded-xl px-4 py-3 text-slate-900 dark:text-neutral-300 text-sm focus:outline-none focus:border-sky-500 transition-colors"
                   >
                     <option value="">Select a Category</option>
                     {initialCategories.map((cat) => (
@@ -329,14 +336,14 @@ export default function ClientHome({ initialCategories, settings }: ClientHomePr
                 </div>
 
                 <div>
-                  <label className="block text-xs font-medium text-neutral-400 uppercase tracking-wider mb-2">
+                  <label className="block text-xs font-medium text-slate-600 dark:text-neutral-400 uppercase tracking-wider mb-2">
                     Project Brief / Inquiry Details
                   </label>
                   <textarea
                     rows={4}
                     {...register("message")}
                     placeholder="Provide details on dimensions, requirements, or custom configurations..."
-                    className="w-full bg-neutral-950 border border-white/10 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-sky-500 transition-colors resize-none"
+                    className="w-full bg-slate-50 dark:bg-neutral-950 border border-slate-300 dark:border-white/10 rounded-xl px-4 py-3 text-slate-900 dark:text-white text-sm focus:outline-none focus:border-sky-500 transition-colors resize-none placeholder:text-slate-400 dark:placeholder:text-neutral-600"
                   ></textarea>
                   {errors.message && (
                     <p className="text-xs text-red-500 mt-1">{errors.message.message}</p>
